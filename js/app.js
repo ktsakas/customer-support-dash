@@ -1,4 +1,61 @@
-var app = angular.module('CustomerDash', ['elasticsearch']);
+var app = angular.module('CustomerDash', [
+	'elasticsearch', 'ngRoute'
+]).config([
+	'$locationProvider', '$routeProvider',
+	function config($locationProvider, $routeProvider) {
+		$routeProvider
+			.when('/', {
+				templateUrl: './views/select-customer.html',
+				controller: 'SelectCustomerController'
+			})
+			.when('/:customer', {
+				templateUrl: './views/dashboard.html',
+				controller: 'DashboardController'
+			})
+			.otherwise('/');
+
+		$locationProvider.html5Mode(true);
+	}
+]);
+
+app.service('client', function (esFactory) {
+	return esFactory({
+		host: 'localhost:9200',
+		apiVersion: '2.3',
+		log: 'trace'
+	});
+});
+
+app.controller('SelectCustomerController', function TestController($routeParams, $scope, client) {
+	console.log("Rout parameters: ", $routeParams);
+
+	client.search({
+		index: "test",
+		body: {
+			"query": {
+				"match_all": {}
+			},
+			"size": 0,
+			"aggs": {
+				"0": {
+					"terms": {
+						"field": "Customer",
+						"order": {
+							"_term": "asc"
+						}
+					}
+				}
+			}
+		}
+	}).then(function (resp) {
+		console.log("customers: ", resp.aggregations[0].buckets);
+		$scope.customers = resp.aggregations[0].buckets;
+	});
+});
+
+app.controller('DashboardController', function ($routeParams, $scope) {
+	$scope.customer = $routeParams.customer;
+});
 
 app.filter('capitalize', function() {
 	return function(input) {
@@ -11,14 +68,6 @@ app.factory('Search', function(){
 	return {
 		filters: ["one"]
 	};
-});
-
-app.service('client', function (esFactory) {
-	return esFactory({
-		host: 'localhost:9200',
-		apiVersion: '2.3',
-		log: 'trace'
-	});
 });
 
 app.controller('RegionFilterController', function ($scope, Search, client) {

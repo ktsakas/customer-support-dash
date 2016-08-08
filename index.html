@@ -2,109 +2,22 @@
 <html>
 <head>
 	<title>Customer Dashboard</title>
+	<base href="/" />
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css" />
-	<link rel="stylesheet/less" type="text/css" href="./styles.less" />
+	<link rel="stylesheet/less" type="text/css" href="./css/styles.less" />
 </head>
-<body ng-app="CustomerDash">
+<body>
 
-	<div class="ui one column centered grid">
-		<div class="ui card">
-		<div class="content">
-			<h2 class="header">Select a Customer</h2>
-
-			<div class="ui list">
-				<div>Hilton</div>
-				<div>Serai</div>
-				<div>Penn</div>
-			</div>
-		</div>
-		</div>
-	</div>
-
-	<div class="ui grid" ng-controller="MainController">
-
-		<div class="six wide column">
-			<div class="ui card">
-				<div class="content">
-					<h2 class="header">Customer Details</h2>
-
-					<div class="description">
-						E-mail: hitlon@test.com
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="five wide column">
-			<div class="ui card" ng-controller="ProjectFilterController">
-				<div class="content">
-					<h2 class="header">Project Filter</h2>
-
-					{{activeRegion || "nothing"}}
-
-					<div class="description">
-						<div class="ui list">
-							<div ng-repeat="project in projects">
-								<a>{{project.key}}</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="five wide column">
-			<div class="ui card" ng-controller="RegionFilterController">
-				<div class="content">
-					<h2 class="header">Region Filter</h2>
-
-					<div class="ui list">
-						<div ng-repeat="region in regions">
-							<a data-region="{{region.key}}">{{region.key | capitalize}}</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="sixteen wide column">
-			<table class="ui celled table">
-				<thead>
-				<tr>
-					<th>FormattedID</th>
-					<th>Client Name</th>
-					<th>BIDNum</th>
-					<th>Salesforce Priority</th>
-					<th>Case Number</th>
-					<th>Ticket Name</th>
-					<th>L3 Kanban Stage</th>
-				</tr>
-				</thead>
-
-				<tbody>
-				<tr ng-repeat="hit in hits">
-					<!-- <td ng-repeat="(field, val) in hit._source">{{field}} {{val || "null"}}</td> -->
-
-					<td>{{hit._source.Story.ID}}</td> <!-- TODO: change to formatted id -->
-					<td>{{hit._source.Customer}}</td>
-					<td>TODO</td>
-					<td>{{hit._source.SalesforcePriority}}</td>
-					<td>{{hit._source.SalesforceCase || "N/A"}}</td>
-					<td>{{hit._source.Story.Name}}</td>
-					<td>{{hit._source.L3KanbanStage}}</td>
-				</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-
+	<div id="main" ng-app="CustomerDash" ng-view></div>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.7.1/less.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-	<script src="node_modules/elasticsearch-browser/elasticsearch.angular.min.js"></script>
-	<script src="./main.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular-route.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/elasticsearch/12.0.0-rc2/elasticsearch.angular.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.7.1/less.min.js"></script>
+	<script src="./js/app.js"></script>
 
 </body>
 </html>
