@@ -20,7 +20,7 @@ var app = angular.module('CustomerDash', [
 
 app.service('client', function (esFactory) {
 	return esFactory({
-		host: 'localhost:9200',
+		host: 'http://40f35fbe.ngrok.io/',
 		apiVersion: '2.3',
 		log: 'trace'
 	});
