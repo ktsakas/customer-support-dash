@@ -1,0 +1,40 @@
+<div class="row">
+
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>Customer Tickets <small>using the filters above</small></h2>
+
+          <div class="clearfix"></div>
+        </div>
+
+        <table class="table table-striped jambo_table bulk_action">
+          <thead>
+          <tr class="headings">
+            <th class="column-title">FormattedID</th>
+            <th class="column-title">Client Name</th>
+            <th class="column-title">BIDNum</th>
+            <th class="column-title">Salesforce Priority</th>
+            <th class="column-title">Case Number</th>
+            <th class="column-title">Ticket Name</th>
+            <th class="column-title">L3 Kanban Stage</th>
+          </tr>
+          </thead>
+        
+          <tbody>
+          <tr ng-repeat="hit in hits">
+            <!-- <td ng-repeat="(field, val) in hit._source">{{field}} {{val || "null"}}</td> -->
+        
+            <td>{{hit._source.Story.ID}}</td> <!-- TODO: change to formatted id -->
+            <td>{{hit._source.Customer}}</td>
+            <td>TODO</td>
+            <td>{{hit._source.SalesforcePriority}}</td>
+            <td>{{hit._source.SalesforceCase || "N/A"}}</td>
+            <td>{{hit._source.Story.Name}}</td>
+            <td>{{hit._source.L3KanbanStage}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>
