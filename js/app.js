@@ -1,26 +1,33 @@
 var app = angular.module('CustomerDash', [
-	'elasticsearch', 'ngRoute'
+	'elasticsearch', 'ngRoute', 'chart.js'
 ]).config([
 	'$locationProvider', '$routeProvider',
 	function config($locationProvider, $routeProvider) {
 		$routeProvider
-			.when('/', {
+			.when('/what', {
 				templateUrl: './views/dashboard.html',
-				controller: 'DashboardController'
+				controller: 'DashboardController',
+				reloadOnSearch: false
 			})
-			.when('/:customer', {
-				templateUrl: './views/dashboard.html',
-				controller: 'DashboardController'
-			})
-			.otherwise('/');
+			.otherwise('/what');
 
 		$locationProvider.html5Mode(true);
 	}
 ]);
 
+app.controller('DashboardController', function ($routeParams, Search, $scope) {
+	$scope.$on('$routeUpdate', function () {
+		Search.setFilters($routeParams);
+
+		console.log(Search.getFilters());
+	});
+
+	$scope.customer = $routeParams.customer;
+});
+
 app.service('client', function (esFactory) {
 	return esFactory({
-		host: 'http://40f35fbe.ngrok.io/',
+		host: 'http://e4562535.ngrok.io',
 		apiVersion: '2.3',
 		log: 'trace'
 	});
@@ -29,7 +36,6 @@ app.service('client', function (esFactory) {
 app.component('sidebar', {
 	templateUrl: "/views/partials/sidebar.html",
 	controller: function ($routeParams, $scope, client) {
-		console.log("Rout parameters: ", $routeParams);
 
 		client.search({
 			index: "test",
@@ -56,17 +62,57 @@ app.component('sidebar', {
 	}
 });
 
+app.directive('kanbanStatesBarChart', function ($timeout) {
+	return {
+		restrict: 'E',
+		template: '<canvas style="width: 484px; height: 242px; min-height: 500px;" width="484" height="242"></canvas>',
+		link: function($scope, element) {
+			$timeout(function () {
+
+				var ctx = element[0].getElementsByTagName('canvas')[0];
+
+				var mybarChart = new Chart(ctx, {
+					type: 'bar',
+					data: {
+						labels: ["Advance Investigation", "In-Progress", "Verified", "Completed", "Closed", "N/A"],
+						datasets: [{
+							label: '# of Tickets',
+							backgroundColor: "#26B99A",
+							data: [51, 30, 40, 28, 92, 50]
+						}]
+					},
+
+					options: {
+						scales: {
+							yAxes: [{
+								ticks: {
+									beginAtZero: true
+								}
+							}]
+						}
+					}
+				});
+
+				console.log(ctx.height);
+
+			}, 1000);
+		}
+	};
+});
+
 app.component('kanbanStates', {
-	templateUrl: "/views/panels/kanban-states.html"
+	templateUrl: "/views/panels/kanban-states.html",
+	controller: function ($scope) {
+		$scope.labels = [["Advance", "Investigation"], "In-Progress", "Verified", "Completed", "Closed", "N/A"];
+		$scope.series = ['Series A', 'Series B'];
+
+		$scope.data = [51, 30, 40, 28, 92, 50];
+	}
 });
 
 
 app.component('topbar', {
 	templateUrl: "/views/partials/topbar.html"
-});
-
-app.controller('DashboardController', function ($routeParams, $scope) {
-	$scope.customer = $routeParams.customer;
 });
 
 app.filter('capitalize', function() {
@@ -76,15 +122,51 @@ app.filter('capitalize', function() {
 	}
 });
 
-app.factory('Search', function(){
+app.factory('Search', function($location, $rootScope){
+	var filters = {};
+
 	return {
-		filters: ["one"]
+		setFilters(filtersObj) {
+			filters = filtersObj;
+		},
+
+		setFilter(field, filterObj) {
+			filters[field] = [ filterObj ];
+
+			$location.search(filters);
+			$rootScope.$emit("filterUpdate");
+
+			return 0;
+		},
+
+		removeFilter(field, idx) {
+			delete filters[field][idx];
+		},
+
+		addFilter(field, filterObj) {
+			if (!filters[field]) filters[field] = [];
+			// Do not add duplicate filters
+			if ( filters[field].indexOf(filterObj) != -1 ) return;
+
+			filters[field].push(filterObj);
+
+			$location.search(filters);
+			$rootScope.$emit("filterUpdate");
+
+			return filters[field].length - 1;
+		},
+
+		getFilters() {
+			return filters;
+		}
 	};
 });
 
 app.component('regions', {
 	templateUrl: "/views/panels/regions.html",
 	controller: function ($scope, Search, client) {
+		angular.extend($scope, Search);
+
 		client.search({
 			index: "test",
 			body: 
@@ -142,39 +224,58 @@ app.component('regions', {
 	}
 });
 
-app.component('details', {
-	templateUrl: "/views/partials/details.html"
+app.component('customerInfo', {
+	templateUrl: "/views/partials/customerInfo.html"
 });
 
 app.component('tickets', {
 	templateUrl: "/views/panels/tickets-table.html",
-	controller: function ($scope, Search, client) {
-		console.log("What is this?");
+	controller: function ($scope, $rootScope, Search, client) {
+		buildFilter = function () {
+			var filters = Search.getFilters(),
+				queryFilter = [];
+			for (field in filters) {
+				var term = {};
+				term[field] = filters[field];
 
-		client.search({
-			index: "test",
-			body: {
-				query: {
-					bool: {
-						filter: {
-							term: { Region: "asia" }
+				queryFilter.push({ term: term });
+			}
+
+			return queryFilter.length > 0 ? { or: queryFilter } : {};
+		};
+
+		findTickets = function () {
+			client.search({
+				index: "test",
+				body: {
+					query: {
+						bool: {
+							filter: buildFilter()
 						}
 					}
 				}
-			}
-		}).then(function (resp) {
-			console.log(resp.hits.hits);
-			$scope.hits = resp.hits.hits;
-		}).catch(function (err) {
-			console.log(err);
+			}).then(function (resp) {
+				console.log(resp.hits.hits);
+				$scope.hits = resp.hits.hits;
+			}).catch(function (err) {
+				console.log(err);
+			});
+		}
+
+		// console.log("search: ", Search.getFilters());
+
+		$rootScope.$on('filterUpdate', function () {
+			findTickets();
 		});
+
+		findTickets();		
 	}
 });
 
 app.component('projects', {
 	templateUrl: "/views/panels/projects.html",
-	controller: function ($scope, Search, client) {
-		$scope.activeRegion = Search;
+	controller: function ($scope, $location, Search, client) {
+		angular.extend($scope, Search);
 
 		client.search({
 			index: "test",
@@ -231,24 +332,4 @@ app.component('projects', {
 			$scope.projects = resp.aggregations[0].buckets;
 		});
 	}
-});
-
-app.controller('MainController', function ($scope, client) {
-	client.search({
-		index: "test",
-		body: {
-			query: {
-				bool: {
-					filter: {
-						term: { Region: "asia" }
-					}
-				}
-			}
-		}
-	}).then(function (resp) {
-		console.log(resp.hits.hits);
-		$scope.hits = resp.hits.hits;
-	}).catch(function (err) {
-		console.log(err);
-	});
 });
