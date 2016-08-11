@@ -14,9 +14,7 @@
         <div class="clearfix"></div>
       </div>
       <div class="x_content">
-        <div class="dashboard-widget-content">
-          <div class="col-md-4 hidden-small">
-            <table class="countries_list">
+            <table class="table-list" width="80%">
               <tbody>
                 <tr ng-click="addFilter('Region', region.key)" ng-repeat="region in regions">
                   <td>{{region.key}}</td>
@@ -25,8 +23,6 @@
               </tbody>
             </table>
           </div>
-          <div id="world-map-gdp" class="col-md-8 col-sm-12 col-xs-12" style="height:230px;"></div>
-        </div>
       </div>
     </div>
   </div>

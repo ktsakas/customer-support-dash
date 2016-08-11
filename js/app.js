@@ -35,7 +35,8 @@ app.service('client', function (esFactory) {
 
 app.component('sidebar', {
 	templateUrl: "/views/partials/sidebar.html",
-	controller: function ($routeParams, $scope, client) {
+	controller: function ($routeParams, $scope, Search, client) {
+		angular.extend($scope, Search);
 
 		client.search({
 			index: "test",

@@ -1,23 +1,63 @@
-.menu_section li {
+.site-title {
+	text-overflow: ellipsis;
+	font-size: 18px;
+	color: #ECF0F1 !important;
+	line-height: 59px;
+	display: block;
+	padding-left: 10px;
+
+	i {
+		font-size: 20px;
+		border: 1px solid #EAEAEA;
+		padding: 6px;
+		margin-right: 4px;
+		border-radius: 50%;
+	}
+}
+
+.menu-title {
+	padding-left: 23px;
+	color: white;
+	text-transform: uppercase;
+	letter-spacing: .5px;
+	font-weight: bold;
+	font-size: 11px;
+	margin-bottom: 0;
+	margin-top: 0;
+	text-shadow: 1px 1px #000;
+}
+
+.side-menu li {
 	margin: 0px;
 	margin-left: 27px;
 	border-left: 1px solid #425668;
 }
 
-.menu_section li a {
-	margin: 0px;
+.side-menu li:hover {
+	background-color: rgba(255,255,255,0.06);
 }
 
-.menu_section li a:before {
-    background: #425668;
-    bottom: auto;
-    content: "";
-    height: 8px;
-    left: -4px;
-    margin-top: 5px;
-    position: absolute;
-    right: auto;
-    width: 8px;
-    z-index: 1;
-    border-radius: 50%;
+.side-menu li a {
+	color: rgba(255,255,255,0.75);
+	margin: 0px;
+	text-transform: capitalize;
+}
+
+.side-menu li a:before {
+	background: #425668;
+	bottom: auto;
+	content: "";
+	height: 8px;
+	left: -4px;
+	margin-top: 5px;
+	position: absolute;
+	right: auto;
+	width: 8px;
+	z-index: 1;
+	border-radius: 50%;
+}
+
+.nav > li > a:hover {
+	color: #ECF0F1;
+	background: none;
 }

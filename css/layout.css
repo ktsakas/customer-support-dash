@@ -1,0 +1,22 @@
+.main {
+	height: 100%;
+	position: relative;
+}
+
+.sidebar {
+	// Use fixed to prevent scrolling
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 230px;
+	height: 100%;
+	background: #2A3F54;
+	color: #ECF0F1;
+}
+
+.right-col {
+	margin-left: 230px;
+	min-height: 100%;
+	overflow: hidden;
+	padding: 0px 20px;
+}
