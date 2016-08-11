@@ -100,11 +100,69 @@ app.directive('kanbanStatesBarChart', function ($timeout) {
 
 app.component('kanbanStates', {
 	templateUrl: "/views/panels/kanban-states.html",
-	controller: function ($scope, Search) {
-		$scope.labels = [["Advance", "Investigation"], "In-Progress", "Verified", "Completed", "Closed", "N/A"];
-		$scope.series = ['Series A', 'Series B'];
+	controller: function ($scope, Search, client) {
+		client.search({
+			index: "test",
+			body: {
+			  "query": {
+			    "filtered": {
+			      "query": {
+			        "query_string": {
+			          "query": "*",
+			          "analyze_wildcard": true
+			        }
+			      },
+			      "filter": {
+			        "bool": {
+			          "must": [
+			            {
+			              "query": {
+			                "query_string": {
+			                  "analyze_wildcard": true,
+			                  "query": "*"
+			                }
+			              }
+			            },
+			            {
+			              "range": {
+			                "Entered": {
+			                  "gte": 1313090826178,
+			                  "lte": 1470943626178,
+			                  "format": "epoch_millis"
+			                }
+			              }
+			            }
+			          ],
+			          "must_not": []
+			        }
+			      }
+			    }
+			  },
+			  "size": 0,
+			  "aggs": {
+			    "0": {
+			      "terms": {
+			        "field": "L3KanbanStage",
+			        "size": 8,
+			        "order": {
+			          "_count": "desc"
+			        }
+			      }
+			    }
+			  }
+			}
+		}).then(function (resp) {
+			var buckets = resp.aggregations[0].buckets;
+			console.log("response: ", buckets);
 
-		$scope.data = [51, 30, 40, 28, 92, 50];
+			$scope.data = buckets.map(function (doc) {
+				return doc.doc_count;
+			});
+
+			$scope.labels = buckets.map(function (doc) {
+				return doc.key.split(' ');
+			});
+		});
 
 		$scope.kanbanFilter = function (e) {
 			var barName = e[0]._model.label;
