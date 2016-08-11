@@ -1,3 +1,59 @@
+body {
+	font-family: 'Open Sans', sans-serif;
+}
+
 .site_title {
 	font-size: 18px;
+}
+
+.filter {
+	display: inline-block;
+	color: white;
+	padding: 10px 20px;
+	font-size: 18px;
+	font-weight: 300;
+	background: #2A3F54;
+
+	.delete-icon {
+		cursor: pointer;
+		width: 16px;
+		height: 16px;
+		margin-left: 12px;
+	}
+}
+
+.or-filter:after {
+	content: "OR";
+	margin: 0px 10px;
+}
+
+.and-filter:after {
+	content: "AND";
+	margin: 0px 10px;
+}
+
+.right_col {
+	padding-top: 50px !important;
+}
+
+nav {
+	background: #EDEDED;
+	border-bottom: 1px solid #D9DEE4;
+
+	.toggle-menu {
+		cursor: pointer;
+		display: inline-block;
+		padding: 0px 15px;
+		font-size: 26px;
+	}
+
+	.toggle-menu:hover {
+		color: #5A738E;
+	}
+}
+
+nav.navbar-fixed-top {
+	position: fixed;
+	left: 230px;
+	top: 0px;
 }

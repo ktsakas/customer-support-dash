@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-12 col-sm-12 col-xs-12">
+  <div class="col-md-6 col-sm-6 col-xs-6">
     <div class="x_panel">
       <div class="x_title">
         <h2>Regions</h2>
@@ -18,25 +18,9 @@
           <div class="col-md-4 hidden-small">
             <table class="countries_list">
               <tbody>
-                <tr ng-click="addFilter('Region', 'United States')">
-                  <td>United States</td>
-                  <td class="fs15 fw700 text-right">33%</td>
-                </tr>
-                <tr ng-click="addFilter('Region', 'France')">
-                  <td>France</td>
-                  <td class="fs15 fw700 text-right">27%</td>
-                </tr>
-                <tr>
-                  <td>Germany</td>
-                  <td class="fs15 fw700 text-right">16%</td>
-                </tr>
-                <tr>
-                  <td>Spain</td>
-                  <td class="fs15 fw700 text-right">11%</td>
-                </tr>
-                <tr>
-                  <td>Britain</td>
-                  <td class="fs15 fw700 text-right">10%</td>
+                <tr ng-click="addFilter('Region', region.key)" ng-repeat="region in regions">
+                  <td>{{region.key}}</td>
+                  <td class="fs15 fw700 text-right">{{region.doc_count | number}}</td>
                 </tr>
               </tbody>
             </table>

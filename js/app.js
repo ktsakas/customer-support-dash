@@ -67,52 +67,64 @@ app.directive('kanbanStatesBarChart', function ($timeout) {
 		restrict: 'E',
 		template: '<canvas style="width: 484px; height: 242px; min-height: 500px;" width="484" height="242"></canvas>',
 		link: function($scope, element) {
-			$timeout(function () {
 
-				var ctx = element[0].getElementsByTagName('canvas')[0];
+			var ctx = element[0].getElementsByTagName('canvas')[0];
 
-				var mybarChart = new Chart(ctx, {
-					type: 'bar',
-					data: {
-						labels: ["Advance Investigation", "In-Progress", "Verified", "Completed", "Closed", "N/A"],
-						datasets: [{
-							label: '# of Tickets',
-							backgroundColor: "#26B99A",
-							data: [51, 30, 40, 28, 92, 50]
+			var mybarChart = new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: ["Advance Investigation", "In-Progress", "Verified", "Completed", "Closed", "N/A"],
+					datasets: [{
+						label: '# of Tickets',
+						backgroundColor: "#26B99A",
+						data: [51, 30, 40, 28, 92, 50]
+					}]
+				},
+
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true
+							}
 						}]
-					},
-
-					options: {
-						scales: {
-							yAxes: [{
-								ticks: {
-									beginAtZero: true
-								}
-							}]
-						}
 					}
-				});
+				}
+			});
 
-				console.log(ctx.height);
-
-			}, 1000);
+			console.log(ctx.height);
 		}
 	};
 });
 
 app.component('kanbanStates', {
 	templateUrl: "/views/panels/kanban-states.html",
-	controller: function ($scope) {
+	controller: function ($scope, Search) {
 		$scope.labels = [["Advance", "Investigation"], "In-Progress", "Verified", "Completed", "Closed", "N/A"];
 		$scope.series = ['Series A', 'Series B'];
 
 		$scope.data = [51, 30, 40, 28, 92, 50];
+
+		$scope.kanbanFilter = function (e) {
+			var barName = e[0]._model.label;
+
+			Search.addFilter('L3KanbanState', barName);
+		};
 	}
 });
 
 
 app.component('topbar', {
-	templateUrl: "/views/partials/topbar.html"
+	templateUrl: "/views/partials/topbar.html",
+	controller: function ($scope, $rootScope, Search) {
+		angular.extend($scope, Search);
+
+		$scope.filters = Search.getFilters();
+
+		$rootScope.$on('filterUpdate', function () {
+			$scope.filters = Search.getFilters();
+		});
+	}
 });
 
 app.filter('capitalize', function() {
@@ -122,8 +134,15 @@ app.filter('capitalize', function() {
 	}
 });
 
-app.factory('Search', function($location, $rootScope){
+app.factory('Search', function($location, $rootScope, $routeParams){
 	var filters = {};
+
+	for (param in $routeParams) {
+		filters[param] = Array.isArray($routeParams[param]) ?
+			$routeParams[param] : [ $routeParams[param] ];
+	}
+	console.log("filters: ", filters);
+
 
 	return {
 		setFilters(filtersObj) {
@@ -139,8 +158,24 @@ app.factory('Search', function($location, $rootScope){
 			return 0;
 		},
 
-		removeFilter(field, idx) {
-			delete filters[field][idx];
+		removeFilter(field, value) {
+			var idx = filters[field].indexOf(value);
+
+			if (idx != -1) {
+				delete filters[field].splice(idx, 1);
+
+				console.log("filters: ", filters[field], filters[field].length);
+
+				if (filters[field].length == 0) 
+					delete filters[field];
+
+				$location.search(filters);
+				$rootScope.$emit("filterUpdate");
+
+				return true;
+			} else {
+				return false;
+			}
 		},
 
 		addFilter(field, filterObj) {
@@ -235,13 +270,17 @@ app.component('tickets', {
 			var filters = Search.getFilters(),
 				queryFilter = [];
 			for (field in filters) {
-				var term = {};
-				term[field] = filters[field];
+				queryFilter.push({
+					or: filters[field].map(function (val) {
+						var term = {};
+						term[field] = val;
 
-				queryFilter.push({ term: term });
+						return { term: term };
+					})
+				});
 			}
 
-			return queryFilter.length > 0 ? { or: queryFilter } : {};
+			return queryFilter.length > 0 ? queryFilter : {};
 		};
 
 		findTickets = function () {
@@ -265,6 +304,7 @@ app.component('tickets', {
 		// console.log("search: ", Search.getFilters());
 
 		$rootScope.$on('filterUpdate', function () {
+			console.log("Query: ", JSON.stringify({ query: { bool: { filter: buildFilter() } } }));
 			findTickets();
 		});
 

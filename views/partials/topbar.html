@@ -1,19 +1,23 @@
-<div class="top_nav">
- <div class="nav_menu">
-  <nav>
-    <div class="nav toggle">
-      <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-    </div>
+<nav  class="navbar-fixed-top">
+  <div class="toggle-menu" ng-click="$root.sidebarHidden = !$root.sidebarHidden">
+    <i class="fa fa-bars"></i>
+  </div>
 
-    <ul class="nav navbar-nav navbar-right">
-      <li class="">
-        <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-          Filters go here
-        </a>
-      </li>
+  <span ng-repeat="(field, values) in filters">
+    <span ng-repeat="value in values">
+      <div class="filter">
+        {{ field }}: {{value}} <img src="../images/cross.svg" class="delete-icon" ng-click="removeFilter(field, value)" />
+      </div>
 
-      <li role="presentation" class="dropdown">&nbsp;</li>
-    </ul>
-  </nav>
- </div>
-</div>
+      <span ng-if="$last == false" class="or-filter"></span>
+    </span>
+
+    <span ng-if="$last == false" class="and-filter"></span>
+  </span>
+
+  <!-- <span class="or-filter"></span> -->
+
+  <!-- <div class="filter">
+    Region: North America <img src="../images/cross.svg" class="delete-icon" />
+  </div> -->
+</nav>

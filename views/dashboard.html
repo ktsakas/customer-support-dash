@@ -1,9 +1,9 @@
 <div class="ui grid dashboard">
-	<sidebar></sidebar>
-	
-	<topbar></topbar>
+	<sidebar ng-hide="$root.sidebarHidden" class="col-md-3 left_col"></sidebar>
 
-	<div class="right_col" role="main">
+	<div class="right_col">
+		<topbar>Test</topbar>
+
 		<customer-info></customer-info>
 
 		<div class="col-md-8 col-sm-8 col-xs-8">
@@ -12,9 +12,7 @@
 			<regions></regions>
 		</div>
 
-		<div class="col-md-4 col-sm-4 col-xs-4">
-			<projects></projects>
-		</div>
+		<projects class="col-md-4 col-sm-4 col-xs-4"></projects>
 
 		<tickets></tickets>
 	</div>
