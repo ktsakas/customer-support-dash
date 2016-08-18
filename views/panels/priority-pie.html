@@ -1,0 +1,26 @@
+<div class="panel">
+
+	<div class="panel-title">
+		<h3>Salesforce Priority</h3>
+
+		<div class="clearfix"></div>
+	</div>
+
+	<table class="x_content">
+		<tr>
+			<td>
+			<canvas height="220" class="chart chart-pie" chart-click="priorityFilter" chart-colors="colors" chart-hover="chartHover" chart-data="data" chart-labels="labels" chart-series="series"></canvas>
+			</td>
+
+			<td>
+			<ul class="chart-legends">
+				<li><div class="color-box" ng-style="{'background-color': colors[0]}"></div>Low</li>
+				<li><div class="color-box" ng-style="{'background-color': colors[1]}"></div>Medium</li>
+				<li><div class="color-box" ng-style="{'background-color': colors[2]}"></div>High</li>
+				<li><div class="color-box" ng-style="{'background-color': colors[3]}"></div>Critical</li>
+			</ul>
+			</td>
+		</tr>
+	</table>
+
+</div>

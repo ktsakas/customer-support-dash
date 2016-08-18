@@ -1,27 +1,46 @@
 .filter {
-	display: inline-block;
+	float: left;
 	color: white;
-	padding: 10px 20px;
-	font-size: 18px;
+	padding: 5px 20px;
+	font-size: 16px;
 	font-weight: 300;
 	background: #2A3F54;
+
+	.legend {
+		display: block;
+		font-size: 13px;
+		font-weight: 600;
+		color: rgba(255,255,255,0.8);
+	}
 
 	.delete-icon {
 		cursor: pointer;
 		width: 16px;
 		height: 16px;
 		margin-left: 12px;
+		margin-top: -20px;
+		opacity: 0.5;
+	}
+
+	.delete-icon:hover {
+		opacity: 1;
 	}
 }
 
-.or-filter:after {
-	content: "OR";
-	margin: 0px 10px;
+.and-filters, .or-filters {
+	float: left;
 }
 
-.and-filter:after {
+.and-connector:after {
 	content: "AND";
-	margin: 0px 10px;
+	float: left;
+	margin: 15px 10px;
+}
+
+.or-connector:after {
+	content: "OR";
+	float: left;
+	margin: 15px 10px;
 }
 
 .right_col {
@@ -33,6 +52,7 @@ nav {
 	border-bottom: 1px solid #D9DEE4;
 
 	.toggle-menu {
+		float: left;
 		cursor: pointer;
 		display: inline-block;
 		padding: 0px 15px;
@@ -42,10 +62,4 @@ nav {
 	.toggle-menu:hover {
 		color: #5A738E;
 	}
-}
-
-nav.navbar-fixed-top {
-	position: fixed;
-	left: 230px;
-	top: 0px;
 }

@@ -1,29 +1,28 @@
-<div class="row">
-	<div class="col-md-6 col-sm-6 col-xs-6">
-		<div class="x_panel">
-			<div class="x_title">
-				<h2>Regions</h2>
+<div class="panel" ng-class="{closed: closed}">
 
-				<ul class="panel_toolbox">
-					<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-					</li>
-					<li><a class="close-link"><i class="fa fa-close"></i></a>
-					</li>
-				</ul>
+	<div class="panel-title">
+		<h2>Regions</h2>
 
-				<div class="clearfix"></div>
-			</div>
-			<div class="x_content">
-						<table class="table-list" width="80%">
-							<tbody>
-								<tr ng-click="addFilter('Region', region.key)" ng-repeat="region in regions">
-									<td>{{region.key}}</td>
-									<td class="fs15 fw700 text-right">{{region.doc_count | number}}</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-			</div>
+		<div class="panel_toolbox">
+			<a class="collapse-link" ng-click="collapsed = !collapsed">
+				<i class="fa {{collapsed ? 'fa-chevron-down' : 'fa-chevron-up' }}"></i>
+			</a>
+			<a class="close-link" ng-click="closed = !closed"><i class="fa fa-close"></i></a>
 		</div>
+
+		<div class="clearfix"></div>
+	</div>
+
+	<div class="panel-content" ng-class="{collapsed: collapsed}">
+		<table class="table-list" width="80%">
+			<tbody>
+				<tr ng-click="toggleFilter('Region', region.key)" ng-class="{active: hasFilter('Region', region.key)}" ng-repeat="region in regions">
+					<td>{{region.key | capitalize}}</td>
+					<td class="text-right">{{region.doc_count | number}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
 	</div>
 </div>

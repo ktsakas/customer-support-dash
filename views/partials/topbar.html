@@ -1,23 +1,23 @@
-<nav  class="navbar-fixed-top">
-  <div class="toggle-menu" ng-click="$root.sidebarHidden = !$root.sidebarHidden">
-    <i class="fa fa-bars"></i>
-  </div>
+<div class="toggle-menu" ng-click="$root.sidebarHidden = !$root.sidebarHidden">
+		<i class="fa fa-bars"></i>
+</div>
 
-  <span ng-repeat="(field, values) in filters">
-    <span ng-repeat="value in values">
-      <div class="filter">
-        {{ field }}: {{value}} <img src="../images/cross.svg" class="delete-icon" ng-click="removeFilter(field, value)" />
-      </div>
+<div ng-repeat="(field, values) in filters"
+	 class="and-filters"
+	 ng-class="{'and-connector': ($last == false)}">
 
-      <span ng-if="$last == false" class="or-filter"></span>
-    </span>
+	<div ng-repeat="value in values" class="or-filters" ng-class="{'or-connector': ($last == false)}">
+		<div class="filter">
+			<div class="legend">{{ field }}</div>
+			{{value}}
+			<img src="../images/cross.svg" class="delete-icon" ng-click="removeFilter(field, value)" />
+		</div>
+	</div>
 
-    <span ng-if="$last == false" class="and-filter"></span>
-  </span>
+</div>
 
-  <!-- <span class="or-filter"></span> -->
+<!-- <span class="or-filter"></span> -->
 
-  <!-- <div class="filter">
-    Region: North America <img src="../images/cross.svg" class="delete-icon" />
-  </div> -->
-</nav>
+<!-- <div class="filter">
+Region: North America <img src="../images/cross.svg" class="delete-icon" />
+</div> -->

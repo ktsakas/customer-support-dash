@@ -1,0 +1,24 @@
+<div class="panel">
+
+	<div class="panel-title">
+		<h3>Status</h3>
+
+		<div class="clearfix"></div>
+	</div>
+
+	<table class="x_content">
+		<tr>
+			<td>
+				<canvas height="220" class="chart chart-pie" chart-click="priorityFilter" chart-hover="chartHover" chart-colors="colors" chart-data="data" chart-labels="labels" chart-series="series"></canvas>
+			</td>
+			<td>
+				<ul class="chart-legends">
+					<li><div class="color-box" ng-style="{'background-color': colors[0]}"></div>Resolved</li>
+					<li><div class="color-box" ng-style="{'background-color': colors[1]}"></div>Res L3</li>
+					<li><div class="color-box" ng-style="{'background-color': colors[2]}"></div>N/A</li>
+				</ul>
+			</td>
+		</tr>
+	</table>
+
+</div>

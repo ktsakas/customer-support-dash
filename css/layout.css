@@ -14,9 +14,18 @@
 	color: #ECF0F1;
 }
 
-.right-col {
+.sidebar-padding {
 	margin-left: 230px;
+}
+
+.right-col {
 	min-height: 100%;
 	overflow: hidden;
 	padding: 0px 20px;
+}
+
+nav.navbar-fixed-top {
+	position: fixed;
+	left: 0px;
+	top: 0px;
 }

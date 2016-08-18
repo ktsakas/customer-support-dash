@@ -1,18 +1,24 @@
-<div class="ui grid dashboard">
+<div class="dashboard">
 	<sidebar ng-hide="$root.sidebarHidden" class="sidebar"></sidebar>
 
-	<div class="right-col">
-		<topbar>Test</topbar>
+	<div class="right-col {{$root.sidebarHidden || 'sidebar-padding'}}">
+		<nav  class="navbar-fixed-top {{$root.sidebarHidden || 'sidebar-padding'}}">
+			<topbar>Test</topbar>
+		</nav>
 
 		<customer-info></customer-info>
 
-		<div class="col-md-8 col-sm-8 col-xs-8">
-			<kanban-states></kanban-states>
-		
-			<regions></regions>
-		</div>
+			<!-- <kanban-states></kanban-states> -->
+
+		<priority-bar class="col-md-8 col-sm-8 col-xs-8"></priority-bar>
+
+		<!-- <date-range class="col-md-4 col-sm-4 col-xs-4"></date-range> -->
 
 		<projects class="col-md-4 col-sm-4 col-xs-4"></projects>
+		<regions class="col-md-4 col-sm-4 col-xs-4"></regions>
+
+		<status-pie class="col-md-6 col-sm-6 col-xs-6"></status-pie>
+		<priority-pie class="col-md-6 col-sm-6 col-xs-6"></priority-pie>
 
 		<tickets></tickets>
 	</div>
