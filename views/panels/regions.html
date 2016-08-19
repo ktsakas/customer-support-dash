@@ -14,7 +14,7 @@
 	</div>
 
 	<div class="panel-content" ng-class="{collapsed: collapsed}">
-		<table class="table-list" width="80%">
+		<table class="table-list selectable" width="100%">
 			<tbody>
 				<tr ng-click="toggleFilter('Region', region.key)" ng-class="{active: hasFilter('Region', region.key)}" ng-repeat="region in regions">
 					<td>{{region.key | capitalize}}</td>

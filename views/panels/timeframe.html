@@ -1,0 +1,28 @@
+<div class="panel" ng-class="{closed: closed}">
+	<div class="panel-title">
+		<h2>Timeframe</h2>
+				
+		<div class="panel_toolbox">
+			<a class="collapse-link" ng-click="collapsed = !collapsed">
+				<i class="fa {{collapsed ? 'fa-chevron-down' : 'fa-chevron-up' }}"></i>
+			</a>
+			<a class="close-link" ng-click="closed = !closed"><i class="fa fa-close"></i></a>
+		</div>
+
+		<div class="clearfix"></div>
+	</div>
+
+	<div class="panel-content" ng-class="{collapsed: collapsed}">
+		<fieldset>
+			<div><input type="radio" name="dateperiod" id="date1"> <label for="date1">All time</label></div>
+
+			<div><input type="radio" name="dateperiod" id="date2"> <label for="date2" ng-click="setPeriod('thisweek')">This week</label></div>
+
+			<div><input type="radio" name="dateperiod" id="date3"> <label for="date3">Last week</label></div>
+			
+			<div><input type="radio" name="dateperiod" id="date4"> <label for="date4">This month</label></div>
+			
+			<div><input type="radio" name="dateperiod" id="date5" checked> <label for="date5">Last month</label></div>
+		</fieldset>
+	</div>
+</div>

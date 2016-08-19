@@ -25,7 +25,6 @@ function SalesforcePriorityCtrl ($scope, Search, client) {
 		}
 	}).then(function (resp) {
 		var buckets = resp.aggregations[0].buckets;
-		console.log("buckets: ", resp);
 
 		$scope.data = buckets.map(function (doc) {
 			return doc.doc_count;
@@ -53,11 +52,6 @@ function SalesforcePriorityCtrl ($scope, Search, client) {
 		Search.addFilter('SalesforcePriority', barName.join(" "));
 	};
 }
-
-app.component('priorityBar', {
-	templateUrl: "/views/panels/priority-bar.html",
-	controller: SalesforcePriorityCtrl
-});
 
 app.component('priorityPie', {
 	templateUrl: "/views/panels/priority-pie.html",

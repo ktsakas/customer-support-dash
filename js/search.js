@@ -1,20 +1,88 @@
 app.factory('Search', function($location, $rootScope, $routeParams){
 	var filters = {};
 	var defaults = [
-		{ term: { "Story.Type": "L3/Salesforce"} },
-		{ missing: { "field": "Exited" } }
+		{ term: { "Story.Type": "L3/Salesforce" } },
+		{ missing: { "field": "Exited" } },
 	];
 
+	var fieldAliases = {};
+	var valueAliases = {};
+
 	for (param in $routeParams) {
-		filters[param] = Array.isArray($routeParams[param]) ?
-			$routeParams[param] : [ $routeParams[param] ];
+		if (filters[param] == false) {
+
+		} else if (typeof filters[param] == "string") {
+			filters[param] = ;
+		} else (typeof filters[param] == "array") {
+			filters[param] = Array.isArray($routeParams[param]) ?
+				$routeParams[param] : [ $routeParams[param] ];
+		}
 	}
-	console.log("filters: ", filters);
+
+	console.log("initer filters: ", filters);
 
 
 	return {
+		/*addFieldNameAlias () {
+
+		},
+*/
+		addFieldNameAlias (field, alias) {
+			fieldAliases[alias] = field;
+		},
+
+		addValueAlias (value, alias) {
+			valueAliases[alias] = value;
+		},
+
+		decodeFieldNames (filters) {
+			var decoded = filters;
+
+			for (field in filters) {
+				if (fieldAliases[field]) {
+					decoded[ fieldAliases[field] ] = decoded[field];
+					delete decoded[field];
+				}
+			}
+
+			return decoded;
+		},
+
+		addTermFilter (field, value) {
+			if (filters[field] == "value") {
+				fieldAliases[field] = value;
+			} else if () {
+				var term = {};
+				term[value] = value;
+
+				valueAliases[value] = { term: term };
+			}
+		},
+
+		decodeValues (filters) {
+			var decoded = filters;
+
+			for (field in filters) {
+				var value = fields[field];
+
+				if (valueAliases[value]) {
+					var idx = filters[field].indexOf(value);
+					if ( idx != -1 ) {
+						if (typeof valueAliases[value] == "array") {
+							filters[field].splice( idx, 1 );
+							filters[field].concat( valueAliases[value] );
+						} else {
+							filters[field][idx] = valueAliases[value];
+						}
+					}
+				}
+			}
+
+			return decoded;
+		},
+
 		// TODO
-		setDefaults(fieltrsObj) {
+		setDefaults(filterObj) {
 
 		},
 
@@ -30,6 +98,15 @@ app.factory('Search', function($location, $rootScope, $routeParams){
 
 			return 0;
 		},
+
+		/*setDaterange (field, fromTimestamp, toTimestamp) {
+			filter.range = {};
+			filter.range[field] = {
+				gte: fromTimestamp,
+				lte: toTimestamp,
+				format: "epoch_millis"
+			};
+		},*/
 
 		hasFilter(field, value) {
 			return filters[field] && filters[field].indexOf(value) != -1;
@@ -74,6 +151,22 @@ app.factory('Search', function($location, $rootScope, $routeParams){
 			$rootScope.$emit("filterUpdate");
 
 			return filters[field].length - 1;
+		},
+
+		getQueryObj () {
+			console.log("getting query obj: ", filters);
+
+			var query = [];
+			for (field in filters) {
+				// console.log(field + " -- " + excludeField);
+				// if (field == excludeField) continue;
+
+				query.push({ or: filters[field] });
+			}
+
+			query = query.concat(defaults);
+
+			return query;
 		},
 
 		getFilterQuery(excludeField) {

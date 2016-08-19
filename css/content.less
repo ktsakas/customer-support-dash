@@ -30,18 +30,55 @@
     column-break-inside: avoid;
     transition: all .2s ease;
 
+	.list {
+		list-style: none;
+		padding: 0px;
+
+		li {
+			margin-top: 10px;
+		}
+	}
+
+    .checkbox {
+		float: left;
+		margin: 0px;
+		margin-right: 10px;
+
+    	width: 20px;
+    	height: 20px;
+    	// background-color: #2A3F54;
+    	background-color: #1abc9c;
+    	border-radius: 3px;
+    	color: white;
+    	padding-top: 2px;
+    	font-size: 16px;
+    }
+
 	.chart-legends {
 		list-style: none;
 		border-left: 1px solid #EEE;
 	}
 
     .color-box {
-    	display: inline-block;
-    	border-radius: 3px;
-    	width: 16px;
-    	height: 16px;
-    	margin-right: 10px;
+		display: inline-block;
+		border-radius: 3px;
+		width: 16px;
+		height: 16px;
+		margin-right: 10px;
     }
+
+	.panelwide-button {
+		font-size: 18px;
+		padding: 10px;
+		margin-top: 10px;
+		text-align: center;
+		border-radius: 3px;
+		cursor: pointer;
+	}
+
+	.panelwide-button:hover {
+		background-color: #f3f3f3;
+	}
 
     .panel-title {
 		h2, h3 {
@@ -109,6 +146,16 @@
 		border-left: 2px solid #ADB2B5;
 		left: 0;
 		height: 50px;
+	}
+}
+
+.table-list.selectable {
+	tr {
+		cursor: pointer;
+	}
+
+	tr:hover:not(.active) {
+		background-color: #f3f3f3;
 	}
 }
 

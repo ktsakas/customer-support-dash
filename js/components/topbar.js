@@ -4,6 +4,9 @@ app.component('topbar', {
 		angular.extend($scope, Search);
 
 		$scope.filters = Search.getFilters();
+		$scope.hasFilters = function () {
+			return Object.keys($scope.filters).length > 0;
+		}
 
 		$rootScope.$on('filterUpdate', function () {
 			$scope.filters = Search.getFilters();

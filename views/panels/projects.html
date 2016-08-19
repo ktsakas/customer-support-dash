@@ -14,8 +14,13 @@
 
 	<div class="panel-content" ng-class="{collapsed: collapsed}">
 		<ul class="list">
-			<li ng-repeat="project in projects" ng-if="project.key.indexOf('L3') != -1">
-				<a ng-click="setFilter('ProjectHierarchy', project.key)">{{project.key}}</a>
+			<li ng-click="addFilter('ProjectHierarchy', 'Channel Management Development and Adapter Support')">
+				<i class="fa fa-check fa-fw checkbox"
+					ng-class="{checked: hasFilter('ProjectHierarchy', 'Channel Management Development and Adapter Support')}"></i>
+					<a>Channel Management Development and Adapter Support</a>
+			</li>
+			<li ng-click="addFilter('ProjectHierarchy', 'Reservations'); addFilter('ProjectHierarchy', 'Reservations Icebox')">
+				<i class="checkbox" ng-class="{checked: hasFilter('ProjectHierarchy', 'Reservations')}"></i><a>iHotelier</a>
 			</li>
 		</ul>
 	</div>

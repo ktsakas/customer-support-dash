@@ -1,0 +1,46 @@
+label {
+	display: block;
+	width: 200px;
+	font-weight: normal;
+}
+
+/* hide input */
+input[type=radio]:empty {
+	margin-left: -999px;
+}
+
+/* style label */
+input[type=radio]:empty ~ label {
+	position: relative;
+	float: left;
+	cursor: pointer;
+}
+
+input[type=radio]:empty ~ label:before {
+	content: '\2714';
+	color: white;
+	background-color: white;
+	float: left;
+	display: block;
+	background: white;
+	border-radius: 3px;
+	padding: 2px 8px;
+	margin-right: 10px;
+}
+
+/* toggle hover */
+input[type=radio]:hover:not(:checked) ~ label:before {
+	content:'\2714';
+}
+
+input[type=radio]:hover:not(:checked) ~ label {
+	color: #888;
+}
+
+/* toggle on */
+input[type=radio]:checked ~ label:before {
+	content:'\2714';
+	background-color: #1abc9c;
+}
+
+input[type=radio]:checked ~ label {}
