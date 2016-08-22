@@ -1,36 +1,33 @@
+fieldset div {
+	overflow: hidden;
+}
+
 label {
 	display: block;
-	width: 200px;
 	font-weight: normal;
 }
 
 /* hide input */
-input[type=radio]:empty {
-	margin-left: -999px;
+input[type=radio] {
+	position: absolute;
+	left: -999px;
 }
 
 /* style label */
-input[type=radio]:empty ~ label {
-	position: relative;
+input[type=radio] ~ label {
+	width: 100%;
 	float: left;
 	cursor: pointer;
+	padding: 5px 15px;
+	margin: 0px;
 }
 
-input[type=radio]:empty ~ label:before {
-	content: '\2714';
-	color: white;
-	background-color: white;
-	float: left;
-	display: block;
-	background: white;
-	border-radius: 3px;
-	padding: 2px 8px;
-	margin-right: 10px;
+.label-right {
+	float: right;
 }
 
-/* toggle hover */
-input[type=radio]:hover:not(:checked) ~ label:before {
-	content:'\2714';
+input[type=radio] ~ label:hover {
+	background-color: #F7F7F7;
 }
 
 input[type=radio]:hover:not(:checked) ~ label {
@@ -38,9 +35,44 @@ input[type=radio]:hover:not(:checked) ~ label {
 }
 
 /* toggle on */
-input[type=radio]:checked ~ label:before {
-	content:'\2714';
+input[type=radio]:checked ~ label {
+	background-color: #2A3F54;
+	color: white;
+}
+
+/* Checklist */
+input[type=checkbox] {
+	margin-left: -999px;
+}
+
+/* style label */
+input[type=checkbox] ~ label {
+	position: relative;
+	float: left;
+	cursor: pointer;
+}
+
+input[type=checkbox] ~ label:before {
+	font: 16px FontAwesome;
+	content: "\f00c";
+	color: white;
+	background-color: white;
+	float: left;
+	display: block;
+	background: white;
+	border-radius: 3px;
+	padding: 3px;
+	margin-right: 10px;
+}
+
+input[type=checkbox]:hover:not(:checked) ~ label {
+	color: #888;
+}
+
+/* toggle on */
+input[type=checkbox]:checked ~ label:before {
+	content: "\f00c";
 	background-color: #1abc9c;
 }
 
-input[type=radio]:checked ~ label {}
+input[type=checkbox]:checked ~ label {}

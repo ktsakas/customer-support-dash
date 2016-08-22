@@ -31,7 +31,7 @@ function SalesforcePriorityCtrl ($scope, Search, client) {
 		});
 
 		$scope.labels = buckets.map(function (doc) {
-			return doc.key.split(' ');
+			return doc.key;
 		});
 
 		$scope.colors = [
@@ -49,7 +49,8 @@ function SalesforcePriorityCtrl ($scope, Search, client) {
 	$scope.priorityFilter = function (e) {
 		var barName = e[0]._model.label;
 
-		Search.addFilter('SalesforcePriority', barName.join(" "));
+		Search.addFilter('SalesforcePriority', barName);
+		$scope.$apply();
 	};
 }
 

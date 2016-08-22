@@ -14,15 +14,30 @@
 
 	<div class="panel-content" ng-class="{collapsed: collapsed}">
 		<fieldset>
-			<div><input type="radio" name="dateperiod" id="date1"> <label for="date1">All time</label></div>
+			<div>
+				<input type="radio" name="dateperiod" id="date1" ng-checked="hasFilter('Timeframe', 'thismonth')">
+				<label for="date1" ng-click="setFilter('Timeframe', {})">All time <div class="label-right">3</div></label>
+			</div>
 
-			<div><input type="radio" name="dateperiod" id="date2"> <label for="date2" ng-click="setPeriod('thisweek')">This week</label></div>
+			<div>
+				<input type="radio" name="dateperiod" id="date2" ng-checked="hasFilter('Timeframe', 'thisweek')">
+				<label for="date2" ng-click="setFilter('Timeframe', 'thisweek')">This week</label>
+			</div>
 
-			<div><input type="radio" name="dateperiod" id="date3"> <label for="date3">Last week</label></div>
+			<div>
+				<input type="radio" name="dateperiod" id="date3" ng-checked="hasFilter('Timeframe', 'lastweek')">
+				<label for="date3" ng-click="setFilter('Timeframe', 'lastweek')">Last week</label>
+			</div>
 			
-			<div><input type="radio" name="dateperiod" id="date4"> <label for="date4">This month</label></div>
+			<div>
+				<input type="radio" name="dateperiod" id="date4" ng-checked="hasFilter('Timeframe', 'thismonth')">
+				<label for="date4" ng-click="setFilter('Timeframe', 'thismonth')">This month</label>
+			</div>
 			
-			<div><input type="radio" name="dateperiod" id="date5" checked> <label for="date5">Last month</label></div>
+			<div>
+				<input type="radio" name="dateperiod" id="date5" ng-checked="hasFilter('Timeframe', 'lastmonth')">
+				<label for="date5" ng-click="setFilter('Timeframe', 'lastmonth')">Last month</label>
+			</div>
 		</fieldset>
 	</div>
 </div>

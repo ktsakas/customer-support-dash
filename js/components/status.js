@@ -1,12 +1,10 @@
 function StatusCtrl ($scope, Search, client) {
-	var filters = Search.getFilterQuery();
-
 	client.search({
 		index: "test",
 		body: {
 		  "query": {
 				"bool": {
-					"filter": filters
+					"filter": Search.getFilterQuery()
 				}
 			},
 		  "size": 0,
@@ -25,6 +23,7 @@ function StatusCtrl ($scope, Search, client) {
 	}).then(function (resp) {
 		var buckets = resp.aggregations[0].buckets;
 
+
 		$scope.data = buckets.map(function (doc) {
 			return doc.doc_count;
 		});
@@ -33,21 +32,55 @@ function StatusCtrl ($scope, Search, client) {
 			return doc.key;
 		});
 
+		$scope.dataset = {
+			hoverBackgroundColor: ['#2A3F54', '#2A3F54', '#2A3F54']
+		};
+			/*{
+				value: 300,
+				backgroundColor:'#F7464A',
+				hoverBackgroundColor: '#000',
+				label: 'Red'
+			},
+			{
+				value: 50,
+				backgroundColor: '#46BFBD',
+				hoverBackgroundColor: '#000',
+				label: 'Green'
+			},
+			{
+				value: 100,
+				backgroundColor: '#FDB45C',
+				hoverBackgroundColor: '#000',
+				label: 'Yellow'
+			}
+		};*/
+
 		$scope.colors = [
-			'#97bbcd',
+			'#008fe6',
 			'#61bc67',
 			'#f7464a',
 		];
 	});
 
-	$scope.chartHover = function (e) {
-		console.log("e: ", e);
+	$scope.chartHover = function (e, mE) {
+		if (e[0]) {
+			mE.srcElement.style = "cursor: pointer";
+		} else {
+			mE.srcElement.style = "";
+		}
 	};
 
-	$scope.priorityFilter = function (e) {
-		var barName = e[0]._model.label;
+	$scope.statusFilter = function (e) {
 
-		Search.addFilter('SalesforcePriority', barName.join(" "));
+		if (e[0]) {
+			var barName = e[0];
+			var barName = e[0]._model.label;
+			var idx = e[0]._index;
+			$scope.colors[idx] = "#2A3F54";
+			Search.addFilter('Status', barName);
+			$scope.$apply();
+			console.log("colors: ", $scope.colors);
+		}
 	};
 }
 

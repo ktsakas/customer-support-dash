@@ -1,85 +1,86 @@
 app.factory('Search', function($location, $rootScope, $routeParams){
+	// All filter values are arrays
 	var filters = {};
 	var defaults = [
 		{ term: { "Story.Type": "L3/Salesforce" } },
 		{ missing: { "field": "Exited" } },
 	];
 
-	var fieldAliases = {};
-	var valueAliases = {};
+	var aliases = {};
+
+	// this.addFieldNameAlias("Missing", "missing");
 
 	for (param in $routeParams) {
-		if (filters[param] == false) {
-
-		} else if (typeof filters[param] == "string") {
-			filters[param] = ;
-		} else (typeof filters[param] == "array") {
-			filters[param] = Array.isArray($routeParams[param]) ?
-				$routeParams[param] : [ $routeParams[param] ];
-		}
+		filters[param] = Array.isArray($routeParams[param])
+			? $routeParams[param] : [ $routeParams[param] ];
 	}
 
-	console.log("initer filters: ", filters);
+	console.log("initer filters: ", JSON.stringify(filters));
 
 
 	return {
-		/*addFieldNameAlias () {
+		addAlias(fieldAlias, valueAlias, queryObj) {
+			if ( !Array.isArray(queryObj) ) throw "queryObj must be an array.";
 
-		},
-*/
-		addFieldNameAlias (field, alias) {
-			fieldAliases[alias] = field;
+			aliases[fieldAlias + ":" + valueAlias] = queryObj;
 		},
 
-		addValueAlias (value, alias) {
-			valueAliases[alias] = value;
-		},
+		decodeAliases (encoded) {
+			var decoded = {};
 
-		decodeFieldNames (filters) {
-			var decoded = filters;
+			for (field in encoded) {
+				decoded[field] = [];
 
-			for (field in filters) {
-				if (fieldAliases[field]) {
-					decoded[ fieldAliases[field] ] = decoded[field];
-					delete decoded[field];
-				}
-			}
+				encoded[field].forEach((value) => {
+					var aliasKey = field + ":" + value;					
 
-			return decoded;
-		},
-
-		addTermFilter (field, value) {
-			if (filters[field] == "value") {
-				fieldAliases[field] = value;
-			} else if () {
-				var term = {};
-				term[value] = value;
-
-				valueAliases[value] = { term: term };
-			}
-		},
-
-		decodeValues (filters) {
-			var decoded = filters;
-
-			for (field in filters) {
-				var value = fields[field];
-
-				if (valueAliases[value]) {
-					var idx = filters[field].indexOf(value);
-					if ( idx != -1 ) {
-						if (typeof valueAliases[value] == "array") {
-							filters[field].splice( idx, 1 );
-							filters[field].concat( valueAliases[value] );
-						} else {
-							filters[field][idx] = valueAliases[value];
-						}
+					if (aliases[aliasKey]) {
+						console.log("found alias", field, aliasKey, aliases[aliasKey]);
+						decoded[field] = decoded[field].concat(aliases[aliasKey]);
+					} else {
+						decoded[field].push(value);
 					}
-				}
+				});
 			}
 
 			return decoded;
 		},
+
+		decodeFilters (encoded) {
+			var decoded = {};
+
+			for (field in encoded) {
+				decoded[field] = [];
+
+				encoded[field].forEach((value) => {
+					if (typeof value != "string")  {
+						decoded[field].push(value);
+					} else {
+						var term = { term: {} };
+						term.term[field] = value;
+						decoded[field].push(term);
+					}
+				});
+			}
+
+			return decoded;
+		},
+
+		addMissingFilter (field) {
+			if (!filters["Missing"]) filters["Missing"] = [];
+
+			filters["Missing"].push(field);
+			$location.search(filters);
+		},
+
+		/*addTermFilter (field, value) {
+			if (!filters[field]) filters[field] = [];
+			if (filters[field].indexOf(value) != -1) return;
+
+			filters[field].push(value);
+
+			$location.search(filters);
+		},*/
 
 		// TODO
 		setDefaults(filterObj) {
@@ -94,7 +95,6 @@ app.factory('Search', function($location, $rootScope, $routeParams){
 			filters[field] = [ filterObj ];
 
 			$location.search(filters);
-			$rootScope.$emit("filterUpdate");
 
 			return 0;
 		},
@@ -124,7 +124,7 @@ app.factory('Search', function($location, $rootScope, $routeParams){
 			var idx = filters[field].indexOf(value);
 
 			if (idx != -1) {
-				delete filters[field].splice(idx, 1);
+				filters[field].splice(idx, 1);
 
 				console.log("filters: ", filters[field], filters[field].length);
 
@@ -132,7 +132,6 @@ app.factory('Search', function($location, $rootScope, $routeParams){
 					delete filters[field];
 
 				$location.search(filters);
-				$rootScope.$emit("filterUpdate");
 
 				return true;
 			} else {
@@ -140,28 +139,26 @@ app.factory('Search', function($location, $rootScope, $routeParams){
 			}
 		},
 
-		addFilter(field, filterObj) {
+		addFilter(field, value) {
 			if (!filters[field]) filters[field] = [];
-			// Do not add duplicate filters
-			if ( filters[field].indexOf(filterObj) != -1 ) return;
+			if (filters[field].indexOf(value) != -1) return;
 
-			filters[field].push(filterObj);
-
+			filters[field].push(value);
 			$location.search(filters);
-			$rootScope.$emit("filterUpdate");
 
 			return filters[field].length - 1;
 		},
 
-		getQueryObj () {
-			console.log("getting query obj: ", filters);
+		getFilterQuery(excludeField) {
+			var decoded = this.decodeAliases(filters);
+			decoded = this.decodeFilters(decoded);
 
 			var query = [];
-			for (field in filters) {
+			for (field in decoded) {
 				// console.log(field + " -- " + excludeField);
-				// if (field == excludeField) continue;
+				if (field == excludeField) continue;
 
-				query.push({ or: filters[field] });
+				query.push({ or: decoded[field] });
 			}
 
 			query = query.concat(defaults);
@@ -169,28 +166,8 @@ app.factory('Search', function($location, $rootScope, $routeParams){
 			return query;
 		},
 
-		getFilterQuery(excludeField) {
-			var queryFilter = [];
-			for (field in filters) {
-				console.log(field + " -- " + excludeField);
-				if (field == excludeField) continue;
-
-				queryFilter.push({
-					or: filters[field].map(function (val) {
-						var term = {};
-						term[field] = val;
-
-						return { term: term };
-					})
-				});
-			}
-
-			queryFilter = queryFilter.concat(defaults);
-
-			return queryFilter.length > 0 ? queryFilter : {};
-		},
-
 		getFilters() {
+			console.log("getting filters: ", JSON.stringify(filters));
 			return filters;
 		}
 	};

@@ -13,15 +13,16 @@
 	</div>
 
 	<div class="panel-content" ng-class="{collapsed: collapsed}">
-		<ul class="list">
-			<li ng-click="addFilter('ProjectHierarchy', 'Channel Management Development and Adapter Support')">
-				<i class="fa fa-check fa-fw checkbox"
-					ng-class="{checked: hasFilter('ProjectHierarchy', 'Channel Management Development and Adapter Support')}"></i>
-					<a>Channel Management Development and Adapter Support</a>
-			</li>
-			<li ng-click="addFilter('ProjectHierarchy', 'Reservations'); addFilter('ProjectHierarchy', 'Reservations Icebox')">
-				<i class="checkbox" ng-class="{checked: hasFilter('ProjectHierarchy', 'Reservations')}"></i><a>iHotelier</a>
-			</li>
-		</ul>
+		<fieldset>
+			<div>
+				<input type="checkbox" name="dateperiod" id="project1" ng-checked="hasFilter('UnderProject', 'CMDAS')">
+				<label for="project1" ng-click="addTermFilter('UnderProject', 'CMDAS')">Channel Management Development and Adapter Support</label>
+			</div>
+
+			<div>
+				<input type="checkbox" name="dateperiod" id="project2" ng-checked="hasFilter('UnderProject', 'iHotelier')">
+				<label for="project2" ng-click="addTermFilter('UnderProject', 'iHotelier')">iHotelier</label>
+			</div>
+		</fieldset>
 	</div>
 </div>
