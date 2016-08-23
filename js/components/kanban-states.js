@@ -41,7 +41,7 @@ app.component('kanbanStates', {
 		console.log("filters: ", filters);
 
 		client.search({
-			index: "test",
+			index: index,
 			body: {
 			  "query": {
 					"bool": {

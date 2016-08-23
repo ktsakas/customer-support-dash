@@ -1,11 +1,10 @@
 app.component('regions', {
 	templateUrl: "/views/panels/regions.html",
-	controller: function ($scope, Search, client) {
+	controller: function ($scope, Search) {
 		angular.extend($scope, Search);
 
-		client.search({
-			index: "test",
-			body: {
+		function showRegions() {
+			Search.query({
 				"query": {
 					"bool": {
 						"filter": Search.getFilterQuery("Region")
@@ -16,16 +15,18 @@ app.component('regions', {
 				    "0": {
 				      "terms": {
 				        "field": "Region",
-				        "size": 5,
 				        "order": {
 				          "_count": "desc"
 				        }
 				      }
 				    }
 				  }
-				}
-		}).then(function (resp) {
-			$scope.regions = resp.aggregations[0].buckets;
-		});
+			}).then(function (resp) {
+				$scope.regions = resp.aggregations[0].buckets;
+			});
+		}
+
+		showRegions();
+		$scope.$on('$routeUpdate', showRegions);
 	}
 });

@@ -1,8 +1,6 @@
 <div class="panel">
 	<div class="panel-title">
-		<h2>Customer Tickets <small>using the filters above</small></h2>
-
-		<div class="clearfix"></div>
+		<h2>Customer Tickets <small>(matching the selected filters)</small></h2>
 	</div>
 
 	<table class="table table-striped jambo_table bulk_action">
@@ -28,7 +26,7 @@
 			<td>{{hit._source.Customer}}</td>
 			<td style="white-space: nowrap;">{{hit._source.Project.Name}}</td>
 			<td style="white-space: nowrap;">{{hit._source.Region}}</td>
-			<td>{{hit._source.CreationDate}}</td>
+			<td style="white-space: nowrap;">{{hit._source.CreationDate}}</td>
 			<td>{{hit._source.SalesforcePriority}}</td>
 			<td>{{hit._source.SalesforceCase || "N/A"}}</td>
 			<td>{{hit._source.Story.Name}}</td>

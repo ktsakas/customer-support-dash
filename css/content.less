@@ -25,10 +25,6 @@
     display: inline-block;
     background: #fff;
     border: 1px solid #E6E9ED;
-    -webkit-column-break-inside: avoid;
-    -moz-column-break-inside: avoid;
-    column-break-inside: avoid;
-    transition: all .2s ease;
 
 	.list {
 		list-style: none;
@@ -82,7 +78,7 @@
 
     .panel-title {
 		h2, h3 {
-			line-height: 28px;
+			line-height: 32px;
 			margin: 0px;
 			float: left;
 			font-size: 20px;
@@ -105,14 +101,23 @@
 	}
 	
 	.panel-content {
+		transition: all .4s ease;
+
+		max-height: 500px;
+		overflow: hidden;
+
 		width: 100%;
 		padding: 5px;
 		border-top: 2px solid #E6E9ED;
 	}
 
 	.collapsed {
-		height: 0px;
+		max-height: 0px;
+		padding-top: 0px;
+		padding-bottom: 0px;
+
 		overflow: hidden;
+		border: none;
 	}
 }
 
@@ -127,6 +132,12 @@
 		padding: 0 10px 0 20px;
 		white-space: nowrap;
 		overflow: hidden;
+	}
+
+	.info_piece {
+		font-size: 28px;
+		line-height: 47px;
+		font-weight: 700;
 	}
 
 	.count {

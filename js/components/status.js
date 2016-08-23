@@ -1,87 +1,83 @@
-function StatusCtrl ($scope, Search, client) {
-	client.search({
-		index: "test",
-		body: {
-		  "query": {
-				"bool": {
-					"filter": Search.getFilterQuery()
-				}
-			},
-		  "size": 0,
-		  "aggs": {
-		    "0": {
-		      "terms": {
-		        "field": "Status",
-		        "size": 4,
-		        "order": {
-		          "_count": "desc"
-		        }
-		      }
-		    }
-		  }
+function StatusCtrl ($scope, $filter, Search) {
+	var activeColor = "#2A3F54";
+	var colors = ['#26b99a', '#3498db', '#9b59b6'];
+
+	function setColors() {
+		$scope.colors = $scope.labels.map(function (label, i) {
+			return Search.hasFilter('Status', label) ? activeColor : colors[i];
+		});
+
+		$scope.dataset = {
+			hoverBackgroundColor: $scope.labels.map(function (label, i) {
+				return Search.hasFilter('Status', label) ? colors[i] : activeColor;
+			})
+		};
+	}
+
+	Search.query({
+		"query": {
+			"bool": {
+				"filter": Search.getFilterQuery("Status")
+			}
+		},
+		"size": 0,
+		"aggs": {
+			"0": {
+				"terms": {
+					"field": "Status",
+					"size": 4,
+					"order": {
+						"_count": "desc"
+					}
+				},
+				"aggs" : {
+	                "avg_age" : {
+	                    "avg": {
+	                         "script": "(DateTime.now().getMillis() - doc['Entered'].value)/(24*60*60*1000) * 1.0"
+	                    }
+	                }
+	            }
+			}
 		}
 	}).then(function (resp) {
 		var buckets = resp.aggregations[0].buckets;
-
 
 		$scope.data = buckets.map(function (doc) {
 			return doc.doc_count;
 		});
 
-		$scope.labels = buckets.map(function (doc) {
-			return doc.key;
+		$scope.barData = buckets.map(function (doc) {
+			console.log("doc: ", doc);
+
+			return doc.avg_age.value;
 		});
 
-		$scope.dataset = {
-			hoverBackgroundColor: ['#2A3F54', '#2A3F54', '#2A3F54']
-		};
-			/*{
-				value: 300,
-				backgroundColor:'#F7464A',
-				hoverBackgroundColor: '#000',
-				label: 'Red'
-			},
-			{
-				value: 50,
-				backgroundColor: '#46BFBD',
-				hoverBackgroundColor: '#000',
-				label: 'Green'
-			},
-			{
-				value: 100,
-				backgroundColor: '#FDB45C',
-				hoverBackgroundColor: '#000',
-				label: 'Yellow'
-			}
-		};*/
+		$scope.labels = buckets.map(function (doc) {
+			return $filter('capitalize')(doc.key);
+		});
 
-		$scope.colors = [
-			'#008fe6',
-			'#61bc67',
-			'#f7464a',
-		];
+		setColors();
+		$scope.$on('$routeUpdate', setColors);
 	});
 
-	$scope.chartHover = function (e, mE) {
-		if (e[0]) {
-			mE.srcElement.style = "cursor: pointer";
-		} else {
-			mE.srcElement.style = "";
-		}
+	$scope.chartHoverPointer = function (e, mE) {
+		mE.srcElement.style = e[0] ? "cursor: pointer" : "";
 	};
 
 	$scope.statusFilter = function (e) {
 
 		if (e[0]) {
-			var barName = e[0];
+			// var barName = e[0];
 			var barName = e[0]._model.label;
-			var idx = e[0]._index;
-			$scope.colors[idx] = "#2A3F54";
-			Search.addFilter('Status', barName);
+			Search.toggleFilter('Status', barName);
+			setColors();
 			$scope.$apply();
-			console.log("colors: ", $scope.colors);
 		}
 	};
+}
+
+function StatusBarCtrl () {
+
 }
 
 app.component('statusPie', {

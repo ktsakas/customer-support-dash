@@ -1,3 +1,6 @@
+var index = "rally";
+
+
 var app = angular.module('CustomerDash', [
 	'elasticsearch', 'ngRoute', 'chart.js'
 ]).config([

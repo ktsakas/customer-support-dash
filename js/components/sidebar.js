@@ -8,7 +8,7 @@ app.component('sidebar', {
 		});
 
 		client.search({
-			index: "test",
+			index: index,
 			body: {
 				"size": 0,
 				"aggs": {

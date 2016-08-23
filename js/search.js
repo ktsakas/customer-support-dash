@@ -1,8 +1,8 @@
-app.factory('Search', function($location, $rootScope, $routeParams){
+app.factory('Search', function($location, $rootScope, $routeParams, client){
 	// All filter values are arrays
 	var filters = {};
 	var defaults = [
-		{ term: { "Story.Type": "L3/Salesforce" } },
+		{ term: { "Story.Type": "l3/salesforce" } },
 		{ missing: { "field": "Exited" } },
 	];
 
@@ -35,7 +35,6 @@ app.factory('Search', function($location, $rootScope, $routeParams){
 					var aliasKey = field + ":" + value;					
 
 					if (aliases[aliasKey]) {
-						console.log("found alias", field, aliasKey, aliases[aliasKey]);
 						decoded[field] = decoded[field].concat(aliases[aliasKey]);
 					} else {
 						decoded[field].push(value);
@@ -57,7 +56,7 @@ app.factory('Search', function($location, $rootScope, $routeParams){
 						decoded[field].push(value);
 					} else {
 						var term = { term: {} };
-						term.term[field] = value;
+						term.term[field] = value.toLowerCase();
 						decoded[field].push(term);
 					}
 				});
@@ -99,44 +98,41 @@ app.factory('Search', function($location, $rootScope, $routeParams){
 			return 0;
 		},
 
-		/*setDaterange (field, fromTimestamp, toTimestamp) {
-			filter.range = {};
-			filter.range[field] = {
-				gte: fromTimestamp,
-				lte: toTimestamp,
-				format: "epoch_millis"
-			};
-		},*/
-
-		hasFilter(field, value) {
-			return filters[field] && filters[field].indexOf(value) != -1;
+		// The search parameter is optional
+		hasFilter(field, search) {
+			if (!search) return filters[field];
+			else {
+				return filters[field] && filters[field].find(function (value) {
+					return value.toLowerCase() == search.toLowerCase();
+				});
+			}
 		},
 
 		toggleFilter(field, value) {
 			if (this.hasFilter(field, value)) {
 				this.removeFilter(field, value);
+				return false;
 			} else {
 				this.addFilter(field, value);
+				return true;
 			}
 		},
 
+		// The value parameter is optional
 		removeFilter(field, value) {
-			var idx = filters[field].indexOf(value);
+			if (!value) {
+				delete filters[field];
+			} else {
+				var idx = filters[field].indexOf(value);
+				if (idx == -1) return;
 
-			if (idx != -1) {
 				filters[field].splice(idx, 1);
-
-				console.log("filters: ", filters[field], filters[field].length);
 
 				if (filters[field].length == 0) 
 					delete filters[field];
-
-				$location.search(filters);
-
-				return true;
-			} else {
-				return false;
 			}
+
+			$location.search(filters);
 		},
 
 		addFilter(field, value) {
@@ -147,6 +143,10 @@ app.factory('Search', function($location, $rootScope, $routeParams){
 			$location.search(filters);
 
 			return filters[field].length - 1;
+		},
+
+		getFilter(field) {
+			return filters[field];
 		},
 
 		getFilterQuery(excludeField) {
@@ -164,6 +164,20 @@ app.factory('Search', function($location, $rootScope, $routeParams){
 			query = query.concat(defaults);
 
 			return query;
+		},
+
+		query(queryObj) {
+			return client.search({
+				index: index,
+				body: queryObj
+			});
+		},
+
+		count(queryObj) {
+			return client.count({
+				index: index,
+				body: { query: queryObj }
+			});
 		},
 
 		getFilters() {

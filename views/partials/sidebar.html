@@ -12,12 +12,12 @@
 
 <!-- Sidebar Menu -->
 <ul ng-if="!searchCustomer.length" class="nav side-menu">
-	<li ng-repeat="customer in focusCustomers" ng-click="setFilter('Customer', customer)"><a>{{customer}}</a></li>
+	<li ng-repeat="customer in focusCustomers" ng-click="setFilter('Customer', customer | capitalize)"><a>{{customer | capitalize}}</a></li>
 </ul>
 
 <ul ng-if="searchCustomer.length" class="nav side-menu">
   <li ng-repeat="customer in customers"
       ng-if="customer.key.indexOf(searchCustomer.toLowerCase()) != -1"
-      ng-click="setFilter('Customer', customer.key)"><a>{{customer.key}}</a></li>
+      ng-click="setFilter('Customer', customer.key | capitalize)"><a>{{customer.key | capitalize}}</a></li>
 </ul>
 <!-- /Sidebar Menu -->

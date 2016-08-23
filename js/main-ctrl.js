@@ -1,12 +1,12 @@
 app.controller('MainCtrl', function ($routeParams, Search, $scope) {
 	/* Project aliases */
 	Search.addAlias("UnderProject", "iHotelier", [
-		{ term: { ProjectHierarchy: "Reservations" } },
-		{ term: { ProjectHierarchy: "Reservations Icebox" } }
+		{ term: { ProjectHierarchy: "reservations" } },
+		{ term: { ProjectHierarchy: "reservations icebox" } }
 	]);
 
 	Search.addAlias("UnderProject", "CMDAS", [{
-		term: { ProjectHierarchy: "Channel Managment Development and Adapter Support" }
+		term: { ProjectHierarchy: "channel managment development and adapter support" }
 	}]);
 
 	/* Time aliases */
@@ -20,12 +20,6 @@ app.controller('MainCtrl', function ($routeParams, Search, $scope) {
 	Search.addAlias("Timeframe", "lastweek", [{
 		range: {
 			CreationDate: { gte: "now-14d/d", lte: "now-7d/d" }
-		}
-	}]);
-
-	Search.addAlias("Timeframe", "thismonth", [{
-		range: {
-			CreationDate: { gte: "now-1M/M", lte: "now" }
 		}
 	}]);
 

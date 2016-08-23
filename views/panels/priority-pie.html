@@ -1,26 +1,40 @@
-<div class="panel">
+<div class="panel" ng-class="{closed: closed}">
 
 	<div class="panel-title">
 		<h3>Salesforce Priority</h3>
 
-		<div class="clearfix"></div>
+		<div class="panel_toolbox">
+			<a class="collapse-link" ng-click="collapsed = !collapsed">
+				<i class="fa {{collapsed ? 'fa-chevron-down' : 'fa-chevron-up' }}"></i>
+			</a>
+			<a class="close-link" ng-click="closed = !closed"><i class="fa fa-close"></i></a>
+		</div>
 	</div>
 
-	<table class="x_content">
+	<div class="panel-content" ng-class="{collapsed: collapsed}">
+	<table>
 		<tr>
 			<td>
-			<canvas height="220" class="chart chart-pie" chart-click="priorityFilter" chart-colors="colors" chart-hover="chartHover" chart-data="data" chart-labels="labels" chart-series="series"></canvas>
+			<canvas
+				height="220"
+				class="chart chart-pie"
+				chart-click="priorityFilter"
+				chart-colors="colors"
+				chart-hover="chartHoverPointer"
+				chart-data="data"
+				chart-labels="labels"
+				chart-series="series"
+				chart-dataset-override="dataset">
+			</canvas>
 			</td>
 
 			<td>
 			<ul class="chart-legends">
-				<li><div class="color-box" ng-style="{'background-color': colors[0]}"></div>Low</li>
-				<li><div class="color-box" ng-style="{'background-color': colors[1]}"></div>Medium</li>
-				<li><div class="color-box" ng-style="{'background-color': colors[2]}"></div>High</li>
-				<li><div class="color-box" ng-style="{'background-color': colors[3]}"></div>Critical</li>
+				<li ng-repeat="label in labels"><div class="color-box" ng-style="{'background-color': colors[$index]}"></div>{{ label | capitalize }}</li>
 			</ul>
 			</td>
 		</tr>
 	</table>
+	</div>
 
 </div>

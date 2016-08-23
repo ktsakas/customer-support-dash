@@ -15,8 +15,8 @@
 	<div class="panel-content" ng-class="{collapsed: collapsed}">
 		<fieldset>
 			<div>
-				<input type="radio" name="dateperiod" id="date1" ng-checked="hasFilter('Timeframe', 'thismonth')">
-				<label for="date1" ng-click="setFilter('Timeframe', {})">All time <div class="label-right">3</div></label>
+				<input type="radio" name="dateperiod" id="date1" ng-checked="!hasFilter('Timeframe')">
+				<label for="date1" ng-click="removeFilter('Timeframe')">All time</label>
 			</div>
 
 			<div>

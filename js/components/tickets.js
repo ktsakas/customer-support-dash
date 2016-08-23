@@ -3,7 +3,7 @@ app.component('tickets', {
 	controller: function ($scope, $rootScope, Search, client) {
 		findTickets = function () {
 			console.log("query: ", JSON.stringify({
-				index: "test",
+				index: index,
 				body: {
 					query: {
 						bool: {
@@ -14,7 +14,7 @@ app.component('tickets', {
 			}));
 
 			client.search({
-				index: "test",
+				index: index,
 				body: {
 					query: {
 						bool: {
@@ -23,8 +23,11 @@ app.component('tickets', {
 					}
 				}
 			}).then(function (resp) {
-				console.log(resp.hits.hits);
-				$scope.hits = resp.hits.hits;
+				$scope.hits = resp.hits.hits.map(function (hit) {
+					hit._source.CreationDate = moment(hit._source.CreationDate).format("YYYY-MM-DD HH:ss");
+
+					return hit;
+				});
 			}).catch(function (err) {
 				console.log(err);
 			});
@@ -32,10 +35,7 @@ app.component('tickets', {
 
 		// console.log("search: ", Search.getFilters());
 
-		$rootScope.$on('filterUpdate', function () {
-			findTickets();
-		});
-
+		$scope.$on('$routeUpdate', findTickets);
 		findTickets();
 	}
 });

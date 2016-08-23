@@ -9,14 +9,12 @@
 			</a>
 			<a class="close-link" ng-click="closed = !closed"><i class="fa fa-close"></i></a>
 		</div>
-
-		<div class="clearfix"></div>
 	</div>
 
 	<div class="panel-content" ng-class="{collapsed: collapsed}">
 		<table class="table-list selectable" width="100%">
 			<tbody>
-				<tr ng-click="toggleFilter('Region', region.key)" ng-class="{active: hasFilter('Region', region.key)}" ng-repeat="region in regions">
+				<tr ng-click="toggleFilter('Region', region.key)" ng-class="{active: hasFilter('Region', region.key | capitalize)}" ng-repeat="region in regions">
 					<td>{{region.key | capitalize}}</td>
 					<td class="text-right">{{region.doc_count | number}}</td>
 				</tr>

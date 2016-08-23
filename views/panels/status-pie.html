@@ -1,24 +1,40 @@
-<div class="panel">
+<div class="panel" ng-class="{closed: closed}">
 
 	<div class="panel-title">
 		<h3>Status</h3>
 
-		<div class="clearfix"></div>
+		<div class="panel_toolbox">
+			<a class="collapse-link" ng-click="collapsed = !collapsed">
+				<i class="fa {{collapsed ? 'fa-chevron-down' : 'fa-chevron-up' }}"></i>
+			</a>
+			<a class="close-link" ng-click="closed = !closed"><i class="fa fa-close"></i></a>
+		</div>
 	</div>
 
-	<table class="x_content">
+	<div class="panel-content" ng-class="{collapsed: collapsed}">
+	<table>
 		<tr>
 			<td>
-				<canvas height="220" class="chart chart-pie linked" chart-data="data"></canvas>
+				<canvas
+					height="220"
+					class="chart chart-pie linked"
+					chart-click="statusFilter"
+					chart-hover="chartHoverPointer"
+					chart-colors="colors"
+					chart-data="data"
+					chart-labels="labels"
+					chart-dataset-override="dataset">
+				</canvas>
 			</td>
 			<td>
 				<ul class="chart-legends">
-					<li><div class="color-box" ng-style="{'background-color': colors[0]}"></div>Resolved</li>
-					<li><div class="color-box" ng-style="{'background-color': colors[1]}"></div>Res L3</li>
-					<li><div class="color-box" ng-style="{'background-color': colors[2]}"></div>N/A</li>
+					<li ng-repeat="label in labels">
+						<div class="color-box" ng-style="{'background-color': colors[$index]}"></div>{{ label }}
+					</li>
 				</ul>
 			</td>
 		</tr>
 	</table>
+	</div>
 
 </div>
