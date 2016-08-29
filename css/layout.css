@@ -23,9 +23,3 @@
 	overflow: hidden;
 	padding: 0px 20px;
 }
-
-nav.navbar-fixed-top {
-	position: fixed;
-	left: 0px;
-	top: 0px;
-}

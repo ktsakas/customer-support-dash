@@ -2,21 +2,6 @@
 		<i class="fa fa-bars"></i>
 </div>
 
-<div ng-repeat="(field, values) in filters"
-	 class="and-filters"
-	 ng-class="{'and-connector': ($last == false)}">
-
-
-	<div ng-repeat="value in values" class="or-filters" ng-class="{'or-connector': ($last == false)}">
-		<div class="filter">
-			<div class="legend">{{ field }}</div>
-			{{value}}
-			<img src="../images/cross.svg" class="delete-icon" ng-click="removeFilter(field, value)" />
-		</div>
-	</div>
-
-</div>
-
 <div class="no-filters" ng-if="!hasFilters()">No filters selected</div>
 
 <!-- <span class="or-filter"></span> -->

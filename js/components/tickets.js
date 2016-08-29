@@ -33,7 +33,11 @@ app.component('tickets', {
 			});
 		}
 
-		// console.log("search: ", Search.getFilters());
+		$scope.filters = Search.getFilters();
+
+		$scope.hasFilters = function () {
+			return Object.keys($scope.filters).length > 0;
+		};
 
 		$scope.$on('$routeUpdate', findTickets);
 		findTickets();

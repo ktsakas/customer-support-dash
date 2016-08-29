@@ -2,11 +2,11 @@ app.controller('MainCtrl', function ($routeParams, Search, $scope) {
 	/* Project aliases */
 	Search.addAlias("UnderProject", "iHotelier", [
 		{ term: { ProjectHierarchy: "reservations" } },
-		{ term: { ProjectHierarchy: "reservations icebox" } }
+		{ term: { ProjectHierarchy: "reservation ice box" } }
 	]);
 
 	Search.addAlias("UnderProject", "CMDAS", [{
-		term: { ProjectHierarchy: "channel managment development and adapter support" }
+		term: { ProjectHierarchy: "channel management development and adapter support" }
 	}]);
 
 	/* Time aliases */

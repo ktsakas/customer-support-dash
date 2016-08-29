@@ -2,7 +2,7 @@ app.factory('Search', function($location, $rootScope, $routeParams, client){
 	// All filter values are arrays
 	var filters = {};
 	var defaults = [
-		{ term: { "Story.Type": "l3/salesforce" } },
+		{ match: { "Story.Type": "L3/salesforce" } },
 		{ missing: { "field": "Exited" } },
 	];
 
@@ -55,9 +55,9 @@ app.factory('Search', function($location, $rootScope, $routeParams, client){
 					if (typeof value != "string")  {
 						decoded[field].push(value);
 					} else {
-						var term = { term: {} };
-						term.term[field] = value.toLowerCase();
-						decoded[field].push(term);
+						var match = { match: {} };
+						match.match[field] = value.toLowerCase();
+						decoded[field].push(match);
 					}
 				});
 			}
@@ -72,7 +72,7 @@ app.factory('Search', function($location, $rootScope, $routeParams, client){
 			$location.search(filters);
 		},
 
-		/*addTermFilter (field, value) {
+		/*addMatchFilter (field, value) {
 			if (!filters[field]) filters[field] = [];
 			if (filters[field].indexOf(value) != -1) return;
 

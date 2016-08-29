@@ -3,6 +3,25 @@
 		<h2>Customer Tickets <small>(matching the selected filters)</small></h2>
 	</div>
 
+	<br /><br />
+
+	<div ng-repeat="(field, values) in filters"
+		 class="and-filters"
+		 ng-class="{'and-connector': ($last == false)}">
+
+
+		<div ng-repeat="value in values" class="or-filters" ng-class="{'or-connector': ($last == false)}">
+			<div class="filter">
+				<div class="legend">{{ field }}</div>
+				{{value}}
+				<img src="../images/cross.svg" class="delete-icon" ng-click="removeFilter(field, value)" />
+			</div>
+		</div>
+
+	</div>
+
+	<div class="no-filters" ng-if="!hasFilters()">No filters selected</div>
+
 	<table class="table table-striped jambo_table bulk_action">
 		<thead>
 		<tr class="headings">

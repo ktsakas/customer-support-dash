@@ -21,7 +21,7 @@ var app = angular.module('CustomerDash', [
 
 app.service('client', function (esFactory) {
 	return esFactory({
-		host: 'http://309b29b7.ngrok.io',
+		host: '127.0.0.1:9200',
 		apiVersion: '2.3',
 		// log: 'trace'
 	});
