@@ -12,6 +12,61 @@
 	}
 }
 
+.legend {
+	display: block;
+	font-size: 13px;
+	font-weight: bold;
+	color: #73879C;
+	padding-bottom: 5px;
+}
+
+.filters {
+	// No styles yet
+}
+
+.filter {
+	float: left;
+	color: white;
+	padding: 5px 10px;
+	font-size: 16px;
+	font-weight: 300;
+	background: #2A3F54;
+	border-radius: 3px;
+
+	.delete-icon {
+		cursor: pointer;
+		width: 16px;
+		height: 16px;
+		margin-left: 12px;
+		margin-top: -3px;
+		opacity: 0.5;
+	}
+
+	.delete-icon:hover {
+		opacity: 1;
+	}
+}
+
+.no-filters {
+	line-height: 50px;
+}
+
+.filter-group {
+	margin-left: 20px;
+	border-right: 1px solid rgba(0,0,0,0.1);
+}
+
+.filter-group:last-child {
+	border: none;
+}
+
+.filter-group, .filter-values {
+	float: left;
+	position: relative;
+	padding-right: 15px;
+}
+
+
 .panel.closed {
 	display: none;
 }

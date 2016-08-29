@@ -25,44 +25,49 @@ app.factory('Search', function($location, $rootScope, $routeParams, client){
 			aliases[fieldAlias + ":" + valueAlias] = queryObj;
 		},
 
-		decodeAliases (encoded) {
-			var decoded = {};
+		decodeAliases (field, encodedField) {
+			var decodedField = [];
 
-			for (field in encoded) {
-				decoded[field] = [];
+			encodedField.forEach((value) => {
+				var aliasKey = field + ":" + value;					
 
-				encoded[field].forEach((value) => {
-					var aliasKey = field + ":" + value;					
+				if (aliases[aliasKey]) {
+					decodedField = decodedField.concat(aliases[aliasKey]);
+				} else {
+					decodedField.push(value);
+				}
+			});
 
-					if (aliases[aliasKey]) {
-						decoded[field] = decoded[field].concat(aliases[aliasKey]);
-					} else {
-						decoded[field].push(value);
-					}
-				});
-			}
+			return decodedField;
+		},
 
-			return decoded;
+		decodeFormat (field, encodedField) {
+			var decodedField = [];
+
+			encodedField.forEach((value) => {
+				if (typeof value != "string")  {
+					decodedField.push(value);
+				} else {
+					var match = { match: {} };
+					match.match[field] = value.toLowerCase();
+					decodedField.push(match);
+				}
+			});
+
+			return decodedField;
 		},
 
 		decodeFilters (encoded) {
 			var decoded = {};
 
-			for (field in encoded) {
-				decoded[field] = [];
-
-				encoded[field].forEach((value) => {
-					if (typeof value != "string")  {
-						decoded[field].push(value);
-					} else {
-						var match = { match: {} };
-						match.match[field] = value.toLowerCase();
-						decoded[field].push(match);
-					}
-				});
-			}
+			for (field in encoded)
+				decoded[field] = this.decodeFilter(field, encoded[field]);
 
 			return decoded;
+		},
+
+		decodeFilter (field, encodedField) {
+			return this.decodeFormat(field, this.decodeAliases(field, encodedField));
 		},
 
 		addMissingFilter (field) {
@@ -150,8 +155,7 @@ app.factory('Search', function($location, $rootScope, $routeParams, client){
 		},
 
 		getFilterQuery(excludeField) {
-			var decoded = this.decodeAliases(filters);
-			decoded = this.decodeFilters(decoded);
+			var decoded = this.decodeFilters(filters);
 
 			var query = [];
 			for (field in decoded) {
@@ -176,7 +180,7 @@ app.factory('Search', function($location, $rootScope, $routeParams, client){
 		count(queryObj) {
 			return client.count({
 				index: index,
-				body: { query: queryObj }
+				body: queryObj
 			});
 		},
 

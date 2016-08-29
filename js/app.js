@@ -21,7 +21,7 @@ var app = angular.module('CustomerDash', [
 
 app.service('client', function (esFactory) {
 	return esFactory({
-		host: '127.0.0.1:9200',
+		host: 'http://na-testl01.gain.tcprod.local:9200',
 		apiVersion: '2.3',
 		// log: 'trace'
 	});
@@ -30,7 +30,6 @@ app.service('client', function (esFactory) {
 
 app.filter('capitalize', function () {
 	return function(input) {
-		console.log("Whatever");
 		return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : "";
 	}
 });

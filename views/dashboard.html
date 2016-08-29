@@ -1,5 +1,5 @@
 <div class="dashboard">
-	<sidebar ng-hide="$root.sidebarHidden" class="sidebar"></sidebar>
+	<sidebar ng-class="{collapsed: $root.sidebarHidden}" class="sidebar"></sidebar>
 
 	<div class="right-col {{$root.sidebarHidden || 'sidebar-padding'}}">
 		<!-- <nav  class="navbar-fixed-top {{$root.sidebarHidden || 'sidebar-padding'}}">

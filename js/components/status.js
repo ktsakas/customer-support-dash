@@ -14,51 +14,58 @@ function StatusCtrl ($scope, $filter, Search) {
 		};
 	}
 
-	Search.query({
-		"query": {
-			"bool": {
-				"filter": Search.getFilterQuery("Status")
+	function queryStatus() {
+		var queryObj = {
+			size: 0,
+			aggs: {
+				status: {
+					terms: {
+						field: "Status",
+						order: {
+							_count: "desc"
+						}
+					},
+					aggs: {
+		                avg_age: {
+		                    avg: {
+		                         script: "(DateTime.now().getMillis() - doc['Entered'].value)/(24*60*60*1000) * 1.0"
+		                    }
+		                }
+		            }
+				}
 			}
-		},
-		"size": 0,
-		"aggs": {
-			"0": {
-				"terms": {
-					"field": "Status",
-					"size": 4,
-					"order": {
-						"_count": "desc"
-					}
-				},
-				"aggs" : {
-	                "avg_age" : {
-	                    "avg": {
-	                         "script": "(DateTime.now().getMillis() - doc['Entered'].value)/(24*60*60*1000) * 1.0"
-	                    }
-	                }
-	            }
-			}
+		};
+
+		var timeframeFilter = Search.getFilter("Timeframe");
+		if (timeframeFilter) {
+			timeframeFilter = Search.decodeFilter("Timeframe", timeframeFilter);
+
+			queryObj.query = { bool: { filter: timeframeFilter } };
 		}
-	}).then(function (resp) {
-		var buckets = resp.aggregations[0].buckets;
 
-		$scope.data = buckets.map(function (doc) {
-			return doc.doc_count;
-		});
+		Search
+			.query(queryObj)
+			.then(function (resp) {
+				var buckets = resp.aggregations["status"].buckets;
 
-		$scope.barData = buckets.map(function (doc) {
-			console.log("doc: ", doc);
+				$scope.data = buckets.map(function (doc) {
+					return doc.doc_count;
+				});
 
-			return doc.avg_age.value;
-		});
+				$scope.barData = buckets.map(function (doc) {
+					console.log("doc: ", doc);
 
-		$scope.labels = buckets.map(function (doc) {
-			return $filter('capitalize')(doc.key);
-		});
+					return doc.avg_age.value;
+				});
 
-		setColors();
-		$scope.$on('$routeUpdate', setColors);
-	});
+				$scope.labels = buckets.map(function (doc) {
+					return $filter('capitalize')(doc.key);
+				});
+
+				setColors();
+				$scope.$on('$routeUpdate', setColors);
+			});
+	}
 
 	$scope.chartHoverPointer = function (e, mE) {
 		mE.srcElement.style = e[0] ? "cursor: pointer" : "";
@@ -74,11 +81,10 @@ function StatusCtrl ($scope, $filter, Search) {
 			$scope.$apply();
 		}
 	};
+
+	queryStatus();
 }
 
-function StatusBarCtrl () {
-
-}
 
 app.component('statusPie', {
 	templateUrl: "/views/panels/status-pie.html",

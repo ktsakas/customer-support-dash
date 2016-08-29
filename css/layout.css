@@ -15,11 +15,12 @@
 }
 
 .sidebar-padding {
-	margin-left: 230px;
+	margin-left: 230px !important;
 }
 
 .right-col {
 	min-height: 100%;
 	overflow: hidden;
 	padding: 0px 20px;
+	margin-left: 50px;
 }

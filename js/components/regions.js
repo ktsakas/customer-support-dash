@@ -4,26 +4,32 @@ app.component('regions', {
 		angular.extend($scope, Search);
 
 		function showRegions() {
-			Search.query({
-				"query": {
-					"bool": {
-						"filter": Search.getFilterQuery("Region")
+			var queryObj = {
+				size: 0,
+				aggs: {
+					regions: {
+						terms: {
+							field: "Region",
+							order: {
+								_count: "desc"
+							}
+						}
 					}
-				},
-				  "size": 0,
-				  "aggs": {
-				    "0": {
-				      "terms": {
-				        "field": "Region",
-				        "order": {
-				          "_count": "desc"
-				        }
-				      }
-				    }
-				  }
-			}).then(function (resp) {
-				$scope.regions = resp.aggregations[0].buckets;
-			});
+				}
+			};
+
+			var timeframeFilter = Search.getFilter("Timeframe");
+			if (timeframeFilter) {
+				timeframeFilter = Search.decodeFilter("Timeframe", timeframeFilter);
+
+				queryObj.query = { bool: { filter: timeframeFilter } };
+			}
+
+			Search
+				.query(queryObj)
+				.then(function (resp) {
+					$scope.regions = resp.aggregations["regions"].buckets;
+				});
 		}
 
 		showRegions();

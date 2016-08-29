@@ -15,13 +15,13 @@
 </div> -->
 
   <div class="col-md-4 col-sm-4 col-xs-6 tile">
-    <span class="count_top"><b>#</b> of Matching Tickets</span>
+    <span class="count_top"><b>#</b> of Customer's Tickets</span>
     <div class="count">{{ matchingCount }}</div>
   </div>
 
   <div class="col-md-4 col-sm-4 col-xs-6 tile">
-    <span class="count_top"><i class="fa fa-clock-o"></i> Avg Days Between States</span>
-    <div class="count">123.50</div>
+    <span class="count_top"><i class="fa fa-clock-o"></i> Avg Days to Resolve</span>
+    <div class="count">{{ avgDaysToResolved | number:1 }}</div>
   </div>
 
 </div>

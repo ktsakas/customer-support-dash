@@ -19,38 +19,46 @@ function SalesforcePriorityCtrl ($scope, Search, client) {
 		};
 	}
 
-	Search.query({
-		"query": {
-			"bool": {
-				"filter": Search.getFilterQuery('SalesforcePriority')
-			}
-		},
-		"size": 0,
-		"aggs": {
-			"0": {
-				"terms": {
-					"field": "SalesforcePriority",
-					"order": {
-						"_count": "desc"
+	var queryObj = {
+		size: 0,
+		aggs: {
+			salesforcePriorities: {
+				terms: {
+					field: "SalesforcePriority",
+					order: {
+						_count: "desc"
 					}
 				}
 			}
 		}
-	}).then(function (resp) {
-		console.log("priority resp: ", resp);
+	};
 
-		var buckets = resp.aggregations[0].buckets;
+	var timeframeFilter = Search.getFilter("Timeframe");
+	if (timeframeFilter) {
+		timeframeFilter = Search.decodeFilter("Timeframe", timeframeFilter);
 
-		$scope.data = buckets.map(function (doc) {
-			return doc.doc_count;
+		queryObj.query = { bool: { filter: timeframeFilter } };
+	}
+
+	console.log("priority query: ", JSON.stringify(queryObj));
+
+	Search
+		.query(queryObj)
+		.then(function (resp) {
+			console.log("priority resp: ", resp);
+
+			var buckets = resp.aggregations["salesforcePriorities"].buckets;
+
+			$scope.data = buckets.map(function (doc) {
+				return doc.doc_count;
+			});
+
+			$scope.labels = buckets.map(function (doc) {
+				return doc.key;
+			});
+
+			setColors();
 		});
-
-		$scope.labels = buckets.map(function (doc) {
-			return doc.key;
-		});
-
-		setColors();
-	});
 
 	$scope.$on('$routeUpdate', setColors);
 

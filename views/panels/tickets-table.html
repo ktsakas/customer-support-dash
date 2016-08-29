@@ -1,37 +1,41 @@
 <div class="panel">
 	<div class="panel-title">
-		<h2>Customer Tickets <small>(matching the selected filters)</small></h2>
+		<h2>Customer Tickets filtered by:</h2>
 	</div>
 
 	<br /><br />
 
-	<div ng-repeat="(field, values) in filters"
-		 class="and-filters"
-		 ng-class="{'and-connector': ($last == false)}">
+	
+	<div class="filters clearfix">
+		<div ng-repeat="(field, values) in filters"
+			 class="filter-group">
 
+			<div class="legend">{{ field }}</div>
 
-		<div ng-repeat="value in values" class="or-filters" ng-class="{'or-connector': ($last == false)}">
-			<div class="filter">
-				<div class="legend">{{ field }}</div>
-				{{value}}
-				<img src="../images/cross.svg" class="delete-icon" ng-click="removeFilter(field, value)" />
+			<div ng-repeat="value in values" class="filter-values">
+				<div class="filter">
+					{{value}}
+					<img src="../images/cross.svg" class="delete-icon" ng-click="removeFilter(field, value)" />
+				</div>
 			</div>
+
 		</div>
 
+		<div class="no-filters" ng-if="!hasFilters()">No filters selected</div>
 	</div>
 
-	<div class="no-filters" ng-if="!hasFilters()">No filters selected</div>
+	<a ng-click="exportCSV">Export as CSV</a>
 
 	<table class="table table-striped jambo_table bulk_action">
 		<thead>
 		<tr class="headings">
 			<th class="column-title">FormattedID</th>
-			<th class="column-title">Client Name</th>
+			<th class="column-title">Customer</th>
 			<th class="column-title">Project</th>
 			<th class="column-title">Region</th>
 			<th class="column-title">Created</th>
-			<th class="column-title">Salesforce Priority</th>
-			<th class="column-title">Case Number</th>
+			<th class="column-title">Priority</th>
+			<th style="white-space: nowrap;" class="column-title">Case #</th>
 			<th class="column-title">Ticket Name</th>
 			<th class="column-title">Kanban Stage</th>
 		</tr>
