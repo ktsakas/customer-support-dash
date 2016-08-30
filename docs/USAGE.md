@@ -2,6 +2,14 @@
 
 ![Dashboard Snapshot](/images/snapshot.png)
 
+### General
+Stats at the top are specific to a customer regardless of the timeframe.
+
+All panels are relative to the customer and timeframe.
+
+The tickets table at the bottom is filtered by the customer, timeframe and any selection made in any of the panels.
+
+### UI
 * Sidebar: use the sidebar to select a focus customer or a specific customer.
     - To search all customers use the first search bar.
     - Use the second search bar to find a focus customer.

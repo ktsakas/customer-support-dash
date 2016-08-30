@@ -33,7 +33,3 @@ app.filter('capitalize', function () {
 		return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : "";
 	}
 });
-
-app.component('customerInfo', {
-	templateUrl: "/views/partials/customerInfo.html"
-});
