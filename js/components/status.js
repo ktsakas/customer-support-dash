@@ -16,6 +16,11 @@ function StatusCtrl ($scope, $filter, Search) {
 
 	function queryStatus() {
 		var queryObj = {
+			query: {
+				bool: {
+					filter: Search.getQueryForFields(["Customer", "Timeframe"])
+				}
+			},
 			size: 0,
 			aggs: {
 				status: {
@@ -36,13 +41,6 @@ function StatusCtrl ($scope, $filter, Search) {
 			}
 		};
 
-		var timeframeFilter = Search.getFilter("Timeframe");
-		if (timeframeFilter) {
-			timeframeFilter = Search.decodeFilter("Timeframe", timeframeFilter);
-
-			queryObj.query = { bool: { filter: timeframeFilter } };
-		}
-
 		Search
 			.query(queryObj)
 			.then(function (resp) {
@@ -53,8 +51,6 @@ function StatusCtrl ($scope, $filter, Search) {
 				});
 
 				$scope.barData = buckets.map(function (doc) {
-					console.log("doc: ", doc);
-
 					return doc.avg_age.value;
 				});
 
@@ -83,6 +79,7 @@ function StatusCtrl ($scope, $filter, Search) {
 	};
 
 	queryStatus();
+	$scope.$on('$routeUpdate', queryStatus);
 }
 
 

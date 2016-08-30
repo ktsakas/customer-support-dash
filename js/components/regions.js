@@ -5,6 +5,11 @@ app.component('regions', {
 
 		function showRegions() {
 			var queryObj = {
+				query: {
+					bool: {
+						filter: Search.getQueryForFields(["Customer", "Timeframe"])
+					}
+				},
 				size: 0,
 				aggs: {
 					regions: {

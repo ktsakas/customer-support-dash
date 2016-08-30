@@ -80,6 +80,21 @@
     background: #fff;
     border: 1px solid #E6E9ED;
 
+	.export-csv {
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		background-color: #f9f9f9;
+		padding: 10px 30px;
+		border-bottom: 1px solid #E6E9ED;
+		border-left: 1px solid #E6E9ED;
+		border-bottom-left-radius: 5px;
+
+		.fa {
+			margin-right: 10px;
+		}
+	}
+
 	.list {
 		list-style: none;
 		padding: 0px;
@@ -214,6 +229,23 @@
 	}
 }
 
+.table {
+	th {
+		cursor: pointer;
+		white-space: nowrap;
+	}
+
+	th.order-asc:after {
+		content: '\25b2';
+		margin-left: 5px;
+	}
+
+	th.order-desc:after {
+		content: '\25bc';
+		margin-left: 5px;
+	}
+}
+
 .table-list.selectable {
 	tr {
 		cursor: pointer;
@@ -247,4 +279,16 @@
 		background-color: #2A3F54;
 		color: white;
 	}
+}
+
+.pagination {
+	margin-bottom: 0px;
+
+	> li > a {
+		color: #73879C;
+	}
+
+	/* > li.active > a {
+		background-color: #2A3F54;
+	} */
 }

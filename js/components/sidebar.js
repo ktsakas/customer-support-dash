@@ -21,10 +21,7 @@ app.component('sidebar', {
 				}
 			}
 		}).then(function (resp) {
-			console.log("customers: ", resp.aggregations[0].buckets);
 			$scope.customers = resp.aggregations[0].buckets;
-
-			console.log("customers: ", $scope.customers);
 		});
 	}
 });

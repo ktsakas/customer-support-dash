@@ -1,18 +1,20 @@
 app.factory('Search', function($location, $rootScope, $routeParams, client){
 	// All filter values are arrays
-	var filters = {};
-	var defaults = [
-		{ match: { "Story.Type": "L3/salesforce" } },
-		{ missing: { "field": "Exited" } },
-	];
-
-	var aliases = {};
-
-	// this.addFieldNameAlias("Missing", "missing");
+	var filters = {},
+		defaults = [
+			{ match: { "Story.Type": "L3/salesforce" } },
+			{ missing: { "field": "Exited" } },
+		],
+		aliases = {},
+		from;
 
 	for (param in $routeParams) {
-		filters[param] = Array.isArray($routeParams[param])
-			? $routeParams[param] : [ $routeParams[param] ];
+		if (param == "from") {
+			from = $routeParams.from;
+		} else {
+			filters[param] = Array.isArray($routeParams[param])
+				? $routeParams[param] : [ $routeParams[param] ];
+		}
 	}
 
 	console.log("initer filters: ", JSON.stringify(filters));
@@ -105,9 +107,9 @@ app.factory('Search', function($location, $rootScope, $routeParams, client){
 
 		// The search parameter is optional
 		hasFilter(field, search) {
-			if (!search) return filters[field];
+			if (!search) return !!filters[field];
 			else {
-				return filters[field] && filters[field].find(function (value) {
+				return filters[field] && !!filters[field].find(function (value) {
 					return value.toLowerCase() == search.toLowerCase();
 				});
 			}
@@ -150,8 +152,25 @@ app.factory('Search', function($location, $rootScope, $routeParams, client){
 			return filters[field].length - 1;
 		},
 
+		getFrom() {
+			return from || 0;
+		},
+
 		getFilter(field) {
 			return filters[field];
+		},
+
+		getQueryForFields(includeFields) {
+			var decoded = this.decodeFilters(filters);
+
+			var query = [];
+			includeFields.forEach((field) => {
+				query.push({ or: decoded[field] });
+			});
+
+			query = query.concat(defaults);
+
+			return query;
 		},
 
 		getFilterQuery(excludeField) {
@@ -185,7 +204,6 @@ app.factory('Search', function($location, $rootScope, $routeParams, client){
 		},
 
 		getFilters() {
-			console.log("getting filters: ", JSON.stringify(filters));
 			return filters;
 		}
 	};

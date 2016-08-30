@@ -47,53 +47,90 @@ app.component('tickets', {
 			return encodeURIComponent(csvContents);
         }
 
-		function downloadCSV (filename, contents) {
-			var a = document.createElement('a');
-			a.href = 'data:attachment/csv,' + contents;
-			a.target = '_blank';
-			a.download = filename;
+        $scope.order = {
+        	field: "Story.Name",
+        	dir: "asc",
+        };
 
-			document.body.appendChild(a);
-			a.click();
+		$scope.orderClass = function (orderField) {
+			return ($scope.order.field == orderField) ? "order-" + $scope.order.dir : "";
+		};
+
+		$scope.toggleOrder = function (orderField) {
+			// Change direction if the field is already the one used
+			if ($scope.order.field == orderField) $scope.order.dir = ($scope.order.dir == "asc") ? "desc" : "asc";
+			// Set the field to sort by
+			$scope.order.field = orderField;
+			findTickets();
+		};
+
+		$scope.downloadCSV = function (filename) {
+			if ($scope.totalMatching <= 1000) {
+				findTickets(1000).then((hits) => {
+					console.log("all hits: ", hits);
+
+					var a = document.createElement('a');
+					a.href = 'data:attachment/csv,' + convertToCSV(hits);
+					a.target = '_blank';
+					a.download = filename;
+
+					document.body.appendChild(a);
+					a.click();
+				});
+			} else {
+				alert("Please refine your query. We can only export up to 1000 tickets.");
+			}
 		}
 
-		function findTickets () {
-			console.log("tickets table: ", Search.getFilterQuery());
+		$scope.showMore = function () {
+			size += 10;
+			findTickets(size);
+		};
 
-			client.search({
+		var size = 10;
+		function findTickets (size) {
+			var sortBy = {};
+			sortBy[ $scope.order.field ] = { order: $scope.order.dir };
+
+			return client.search({
 				index: index,
+				from: Search.getFrom(),
+				size: size,
 				body: {
 					query: {
 						bool: {
 							filter: Search.getFilterQuery()
 						}
-					}
-				},
-				size: 1000
+					},
+					sort: sortBy
+				}
 			}).then(function (resp) {
 
-				downloadCSV("test.csv", convertToCSV(resp.hits.hits));
+				$scope.totalMatching = resp.hits.total;
 
 				$scope.hits = resp.hits.hits.map(function (hit) {
 					hit._source.CreationDate = moment(hit._source.CreationDate).format("YYYY-MM-DD HH:ss");
 
 					return hit;
 				});
+
+				return $scope.hits;
 			}).catch(function (err) {
 				console.log(err);
 			});
 		}
 
 		$scope.filters = Search.getFilters();
-		findTickets();
+		findTickets(size);
 
 		$scope.hasFilters = function () {
 			return Object.keys($scope.filters).length > 0;
 		};
 
 		$scope.$on('$routeUpdate', function () {
+			size = 10;
 			$scope.filters = Search.getFilters();
-			findTickets();
+			findTickets(size);
 		});
 	}
 });

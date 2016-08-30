@@ -19,48 +19,49 @@ function SalesforcePriorityCtrl ($scope, Search, client) {
 		};
 	}
 
-	var queryObj = {
-		size: 0,
-		aggs: {
-			salesforcePriorities: {
-				terms: {
-					field: "SalesforcePriority",
-					order: {
-						_count: "desc"
+	function queryPriority() {
+		var queryObj = {
+			query: {
+				bool: {
+					filter: Search.getQueryForFields(["Customer", "Timeframe"])
+				}
+			},
+			size: 0,
+			aggs: {
+				salesforcePriorities: {
+					terms: {
+						field: "SalesforcePriority",
+						order: {
+							_count: "desc"
+						}
 					}
 				}
 			}
-		}
-	};
+		};
 
-	var timeframeFilter = Search.getFilter("Timeframe");
-	if (timeframeFilter) {
-		timeframeFilter = Search.decodeFilter("Timeframe", timeframeFilter);
 
-		queryObj.query = { bool: { filter: timeframeFilter } };
+		Search
+			.query(queryObj)
+			.then(function (resp) {
+				var buckets = resp.aggregations["salesforcePriorities"].buckets;
+
+				$scope.data = buckets.map(function (doc) {
+					return doc.doc_count;
+				});
+
+				$scope.labels = buckets.map(function (doc) {
+					return doc.key;
+				});
+
+				setColors();
+			});
 	}
 
-	console.log("priority query: ", JSON.stringify(queryObj));
+	queryPriority();
 
-	Search
-		.query(queryObj)
-		.then(function (resp) {
-			console.log("priority resp: ", resp);
-
-			var buckets = resp.aggregations["salesforcePriorities"].buckets;
-
-			$scope.data = buckets.map(function (doc) {
-				return doc.doc_count;
-			});
-
-			$scope.labels = buckets.map(function (doc) {
-				return doc.key;
-			});
-
-			setColors();
-		});
-
-	$scope.$on('$routeUpdate', setColors);
+	$scope.$on('$routeUpdate', function () {
+		queryPriority();
+	});
 
 	$scope.chartHoverPointer = function (e, mE) {
 		mE.srcElement.style = e[0] ? "cursor: pointer" : "";

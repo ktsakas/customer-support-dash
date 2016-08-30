@@ -1,6 +1,6 @@
 <div class="panel">
 	<div class="panel-title">
-		<h2>Customer Tickets filtered by:</h2>
+		<h2>{{ totalMatching }} Customer Tickets matching:</h2>
 	</div>
 
 	<br /><br />
@@ -24,20 +24,20 @@
 		<div class="no-filters" ng-if="!hasFilters()">No filters selected</div>
 	</div>
 
-	<a ng-click="exportCSV">Export as CSV</a>
+	<a class="export-csv" ng-click="downloadCSV('tickets.csv');"><i class="fa fa-download"></i> Export as CSV</a>
 
 	<table class="table table-striped jambo_table bulk_action">
 		<thead>
 		<tr class="headings">
-			<th class="column-title">FormattedID</th>
-			<th class="column-title">Customer</th>
-			<th class="column-title">Project</th>
-			<th class="column-title">Region</th>
-			<th class="column-title">Created</th>
-			<th class="column-title">Priority</th>
-			<th style="white-space: nowrap;" class="column-title">Case #</th>
-			<th class="column-title">Ticket Name</th>
-			<th class="column-title">Kanban Stage</th>
+			<th class="{{ orderClass('Story.FormattedID') }}" ng-click="toggleOrder('Story.FormattedID')">ID</th>
+			<th class="{{ orderClass('Customer') }}" ng-click="toggleOrder('Customer')">Customer</th>
+			<th class="{{ orderClass('Project.Name') }}" ng-click="toggleOrder('Project.Name')">Project</th>
+			<th class="{{ orderClass('Region') }}" ng-click="toggleOrder('Region')">Region</th>
+			<th class="{{ orderClass('CreationDate') }}" ng-click="toggleOrder('CreationDate')">Created</th>
+			<th class="{{ orderClass('SalesforcePriority') }}" ng-class="" ng-click="toggleOrder('SalesforcePriority')">Priority</th>
+			<th class="{{ orderClass('SalesforceCase') }}" ng-click="toggleOrder('SalesforceCase')">Case #</th>
+			<th class="{{ orderClass('Story.Name') }}" ng-click="toggleOrder('Story.Name')">Ticket Name</th>
+			<th class="{{ orderClass('L3KanbanStage') }}" ng-click="toggleOrder('L3KanbanStage')">Kanban Stage</th>
 		</tr>
 		</thead>
 	
@@ -57,4 +57,10 @@
 		</tr>
 		</tbody>
 	</table>
+	
+	<br />
+
+	<button ng-click="showMore();" class="btn btn-primary">Show More</button>
+
+
 </div>

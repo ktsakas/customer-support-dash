@@ -8,7 +8,7 @@ app.component('tiles', {
 				customerTicketCountQuery = !customerFilter.length ? {} : {
 					query: {
 						bool: {
-							filter: Search.decodeFilter("Customer", customerFilter)
+							filter: Search.getQueryForFields(["Customer"])
 						}
 					}
 				};
@@ -22,7 +22,7 @@ app.component('tiles', {
 			var avgDaysToResolvedQuery = {
 				"query": {
 					"bool": {
-						"filter": customerFilter.concat({ "match": { "Status": "Resolved" } })
+						"filter": Search.getQueryForFields(["Customer"]).concat({ "match": { "Status": "Resolved" } })
 					}
 				},
 				"size": 0,
@@ -35,12 +35,9 @@ app.component('tiles', {
 				}
 			};
 
-			console.log("count for: ", JSON.stringify(avgDaysToResolvedQuery));
 			Search
 				.query(avgDaysToResolvedQuery)
 				.then(function (resp) {
-					console.log("resp: ", resp);
-
 					$scope.avgDaysToResolved = resp.aggregations["avgDaysToResolved"].value;
 				});
 		}
