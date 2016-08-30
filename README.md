@@ -5,7 +5,7 @@ The dashboard for Travelclick customer support tickets based on data pulled in f
 For more information on the data look at the README files in this repo:
 https://github.com/ktsakas/rally-data-pull
 
-Help:
+Readmes:
 * Installation
 * Project Structure
 * Usage

@@ -4,13 +4,21 @@ Requirements NodeJS, ElasticSearch.
 
 Assuming you are already running an instance of ElasticSearch and have pulled in the data from Rally, do the following in order to run the project.
 
-`git clone https://github.com/ktsakas/customer-support-dash.git`
+```
+git clone https://github.com/ktsakas/customer-support-dash.git
+```
 
-`cd customer-support-dash`
+```
+cd customer-support-dash
+```
 
-`npm install`
+```
+npm install
+```
 
-`node server`
+```
+node server
+```
 
 You will see the message "Listening on port 8080...".
 
