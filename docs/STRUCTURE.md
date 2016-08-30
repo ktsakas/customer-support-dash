@@ -26,4 +26,5 @@ The search factory is the core of the app and has the following functionality:
     - All aliases are instantiated in the `main-ctrl.js`, currently we only have aliases for Projects and Timeframe filters.
 * Updates the route to reflect the selected filters.
 * Provides functionality to add/remove/toggle/check for filters.
-* Can generate most of the query to be sent to ElasticSearch.
+* Can build part of the query sent ElasticSearch, by each component.
+* Provides functions to perform queries on ElasticSearch.

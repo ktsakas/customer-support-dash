@@ -1,5 +1,6 @@
 app.controller('MainCtrl', function ($routeParams, Search, $scope) {
 	/* Project aliases */
+	
 	Search.addAlias("UnderProject", "iHotelier", [
 		{ term: { ProjectHierarchy: "reservations" } },
 		{ term: { ProjectHierarchy: "reservation ice box" } }
@@ -34,10 +35,6 @@ app.controller('MainCtrl', function ($routeParams, Search, $scope) {
 			CreationDate: { gte: "now-2M/M", lte: "now-1M/M" }
 		}
 	}]);
-
-	$scope.$on('$routeUpdate', function () {
-		Search.setFilters($routeParams);
-	});
 
 	$scope.customer = $routeParams.customer;
 });

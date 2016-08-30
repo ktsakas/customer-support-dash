@@ -1,6 +1,10 @@
 var index = "rally";
 
+/*
+	App config.
 
+	Routes everything to the dashboard view.
+ */
 var app = angular.module('CustomerDash', [
 	'elasticsearch', 'ngRoute', 'chart.js'
 ]).config([
@@ -18,7 +22,9 @@ var app = angular.module('CustomerDash', [
 	}
 ]);
 
-
+/*
+	ElasticSearch query service.
+ */
 app.service('client', function (esFactory) {
 	return esFactory({
 		host: 'http://na-testl01.gain.tcprod.local:9200',
@@ -27,7 +33,9 @@ app.service('client', function (esFactory) {
 	});
 });
 
-
+/*
+	Capitalize the first character of each word.
+ */
 app.filter('capitalize', function () {
 	return function(input) {
 		return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : "";
