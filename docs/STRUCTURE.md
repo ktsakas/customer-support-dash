@@ -9,8 +9,8 @@ As such the is no app folder.
     - A lot of the CSS initially came from [Gentelella](https://colorlib.com/polygon/gentelella/index.html), so to add futher components you can copy css from their project to keep stuff consistent.
     - All CSS is written using [Less.js](http://lesscss.org/).
 * docs: readme files
-* js: javascript files (read bellow for more details)
-* views: html files (read bellow for more details)
+* js: javascript files (read "Under the hood" for more details)
+* views: html files (read "Under the hood" for more details)
 
 ### Under the hood
 
