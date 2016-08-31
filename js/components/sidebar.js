@@ -1,27 +1,30 @@
 app.component('sidebar', {
 	templateUrl: "/views/partials/sidebar.html",
-	controller: function ($routeParams, $scope, $http, Search, client) {
+	controller: function ($routeParams, $scope, Search, client) {
 		angular.extend($scope, Search);
-
-		$http.get('/js/focus-customers.json').then(function(res) {
-			$scope.focusCustomers = res.data;                
-		});
 
 		client.search({
 			index: index,
 			body: {
 				"size": 0,
 				"aggs": {
-					"0": {
+					"customers": {
 						"terms": {
 							"field": "Customer",
+							"order": { "_term": "asc" }
+						}
+					},
+					"customerGroups": {
+						"terms": {
+							"field": "CustomerGroup",
 							"order": { "_term": "asc" }
 						}
 					}
 				}
 			}
 		}).then(function (resp) {
-			$scope.customers = resp.aggregations[0].buckets;
+			$scope.customers = resp.aggregations["customers"].buckets;
+			$scope.customerGroups = resp.aggregations["customerGroups"].buckets;
 		});
 	}
 });

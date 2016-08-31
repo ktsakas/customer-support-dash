@@ -20,22 +20,32 @@
 			</div>
 
 			<div>
-				<input type="radio" name="dateperiod" id="date2" ng-checked="hasFilter('Timeframe', 'thisweek')">
+				<input type="radio" name="dateperiod" id="date2" ng-checked="hasFilter('Timeframe', 'today')">
+				<label for="date2" ng-click="setFilter('Timeframe', 'today')">Today</label>
+			</div>
+
+			<div>
+				<input type="radio" name="dateperiod" id="date3" ng-checked="hasFilter('Timeframe', 'yesterday')">
+				<label for="date3" ng-click="setFilter('Timeframe', 'yesterday')">Yesterday</label>
+			</div>
+
+			<div>
+				<input type="radio" name="dateperiod" id="date4" ng-checked="hasFilter('Timeframe', 'thisweek')">
 				<label for="date2" ng-click="setFilter('Timeframe', 'thisweek')">This week</label>
 			</div>
 
 			<div>
-				<input type="radio" name="dateperiod" id="date3" ng-checked="hasFilter('Timeframe', 'lastweek')">
+				<input type="radio" name="dateperiod" id="date5" ng-checked="hasFilter('Timeframe', 'lastweek')">
 				<label for="date3" ng-click="setFilter('Timeframe', 'lastweek')">Last week</label>
 			</div>
 			
 			<div>
-				<input type="radio" name="dateperiod" id="date4" ng-checked="hasFilter('Timeframe', 'thismonth')">
+				<input type="radio" name="dateperiod" id="date6" ng-checked="hasFilter('Timeframe', 'thismonth')">
 				<label for="date4" ng-click="setFilter('Timeframe', 'thismonth')">This month</label>
 			</div>
 			
 			<div>
-				<input type="radio" name="dateperiod" id="date5" ng-checked="hasFilter('Timeframe', 'lastmonth')">
+				<input type="radio" name="dateperiod" id="date7" ng-checked="hasFilter('Timeframe', 'lastmonth')">
 				<label for="date5" ng-click="setFilter('Timeframe', 'lastmonth')">Last month</label>
 			</div>
 		</fieldset>

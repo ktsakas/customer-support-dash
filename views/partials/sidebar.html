@@ -8,16 +8,22 @@
 
 <br />
 
-<h3 ng-hide="$root.sidebarHidden" class="menu-title">Customer Groups</h3>
+<input ng-hide="$root.sidebarHidden" type="text" class="form-control" placeholder="Search focus customers..." ng-model="searchCustomerGroup" />
+
+<br />
+
+<h3 ng-hide="$root.sidebarHidden" class="menu-title">Customer</h3>
 
 <!-- Sidebar Menu -->
-<ul ng-hide="$root.sidebarHidden" ng-if="!searchCustomer.length" class="nav side-menu">
-	<li ng-repeat="customer in focusCustomers" ng-click="setFilter('Customer', customer | capitalize)"><a>{{customer | capitalize}}</a></li>
+<ul ng-hide="$root.sidebarHidden" ng-if="searchCustomer.length" class="nav side-menu">
+	<li ng-repeat="customer in customers"
+    	ng-if="customer.key.indexOf(searchCustomer.toLowerCase()) != -1"
+		ng-click="setFilter('Customer', customer.key | capitalize)"><a>{{customer.key | capitalize}}</a></li>
 </ul>
 
-<ul ng-hide="$root.sidebarHidden" ng-if="searchCustomer.length" class="nav side-menu">
-  <li ng-repeat="customer in customers"
-      ng-if="customer.key.indexOf(searchCustomer.toLowerCase()) != -1"
-      ng-click="setFilter('Customer', customer.key | capitalize)"><a>{{customer.key | capitalize}}</a></li>
+<ul ng-hide="$root.sidebarHidden" ng-if="!searchCustomer.length" class="nav side-menu">
+  <li ng-repeat="customerGroup in customerGroups"
+      ng-if="!searchCustomerGroup.length || customerGroup.key.indexOf(searchCustomerGroup.toLowerCase()) != -1"
+      ng-click="setFilter('Customer', customerGroup.key)"><a>{{ customerGroup.key | capitalize }}</a></li>
 </ul>
 <!-- /Sidebar Menu -->

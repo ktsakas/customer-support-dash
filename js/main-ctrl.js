@@ -12,6 +12,18 @@ app.controller('MainCtrl', function ($routeParams, Search, $scope) {
 
 	/* Time aliases */
 
+	Search.addAlias("Timeframe", "today", [{
+		range: {
+			CreationDate: { gte: "now-1d/d", lte: "now" }
+		}
+	}]);
+
+	Search.addAlias("Timeframe", "yesterday", [{
+		range: {
+			CreationDate: { gte: "now-1d/d", lte: "now-2d/d" }
+		}
+	}]);
+
 	Search.addAlias("Timeframe", "thisweek", [{
 		range: {
 			CreationDate: { gte: "now-7d/d", lte: "now" }
